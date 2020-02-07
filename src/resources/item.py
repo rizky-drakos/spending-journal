@@ -1,5 +1,11 @@
 from flask_restful import Resource
 
+from models import ItemModel, ItemSchema
+
+
+item_schema = ItemSchema()
+items_schema = ItemSchema(many=True)
+
 
 class Item(Resource):
 
@@ -16,7 +22,8 @@ class Item(Resource):
 class Items(Resource):
 
     def get(self):
-        pass
+        items = ItemModel.query.all()
+        return items_schema.dump(items)
 
     def post(self):
         pass
