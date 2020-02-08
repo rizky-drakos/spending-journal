@@ -5,11 +5,11 @@ class ItemTypeModel(db.Model):
     __tablename__ = "item_types"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
-
-
-class ItemTypeSchema(ma.Schema):
-    class Meta:
-        model = ItemTypeModel
+    items = db.relationship(
+        "ItemModel",
+        backref="item_type",
+        cascade="all, delete-orphan"
+    )
 
 
 class ItemModel(db.Model):
@@ -18,10 +18,21 @@ class ItemModel(db.Model):
     name = db.Column(db.String(64), nullable=False)
     record_date = db.Column(db.Date, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
-    item_type_id = db.Column(db.Integer, db.ForeignKey("item_types.id"))
-    item_type = db.relationship("ItemTypeModel", backref="item_type")
+    item_type_id = db.Column(
+        db.Integer, db.ForeignKey("item_types.id"),
+        nullable=False
+    )
 
 
-class ItemSchema(ma.Schema):
+class ItemTypeSchema(ma.ModelSchema):
     class Meta:
-        model = ItemModel
+        fields = ("id", "name")
+
+
+class ItemSchema(ma.ModelSchema):
+    class Meta:
+        fields = ("id", "name", "record_date", "amount", "item_type_id")
+
+# it's better to place Model Classes next to each other,
+# otherwise you'll get an error that can't locate class
+# name from SqlAlchemy.
