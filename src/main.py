@@ -1,10 +1,12 @@
 from flask import Flask
+from flask_cors import CORS
 
 from extentions import api, db, ma
 from resources.item import Item, Items
 from resources.item_type import ItemType, ItemTypes
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     "mysql+pymysql://root:rootroot@mysql-container/mydb"
