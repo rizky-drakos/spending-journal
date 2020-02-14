@@ -31,8 +31,9 @@ class ItemTypeSchema(ma.ModelSchema):
 
 class ItemSchema(ma.ModelSchema):
     class Meta:
-        fields = ("id", "name", "record_date", "amount", "item_type_id")
+        fields = ("id", "name", "record_date", "amount", "item_type")
+    item_type = ma.Pluck(ItemTypeSchema, "name")
 
 # it's better to place Model Classes next to each other,
-# otherwise you'll get an error that can't locate class
+# otherwise you'll get an error that it can't locate class
 # name from SqlAlchemy.
