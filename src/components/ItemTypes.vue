@@ -1,8 +1,9 @@
 <template>
       <v-data-table
-          :headers="headers"
-          :items="item_types"
-          hide-default-footer>
+        hide-default-header
+        :headers="headers"
+        :items="item_types"
+        hide-default-footer>
       </v-data-table>
 </template>
 
@@ -17,10 +18,9 @@ import axios from 'axios';
       item_types: [],
     }),
     mounted() {
-      axios.get('http://localhost:5000/item-types')
+      axios.get('http://192.168.1.105:5000/item-types')
       .then(response => {
         this.item_types = response.data;
-        console.log(this.item_types);
       })
     }
   }

@@ -1,19 +1,20 @@
 <template>
   <v-app id="inspire">
 
-    <v-app-bar
-      app
-      color="indigo"
-      dark
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>Spending Journal</v-toolbar-title>
-    </v-app-bar>
-
     <v-navigation-drawer
-      v-model="drawer"
+      expand-on-hover
+      permanent
       app
     >
+      <v-list-item class="px-2">
+        <v-list-item-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/40.jpg"></v-img>
+        </v-list-item-avatar>
+
+        <v-list-item-title>John Leider</v-list-item-title>
+      </v-list-item>
+
+      <v-divider></v-divider>
       <v-list>
 
         <v-list-item link to="/">
@@ -58,8 +59,7 @@
 <script>
   export default {
     data: () => ({
-      drawer: true,
-
+      
     })
   }
 </script>
