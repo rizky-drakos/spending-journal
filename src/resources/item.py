@@ -17,8 +17,7 @@ class Item(Resource):
     def put(self, id):
         item = ItemModel.query.get(id)
         for k, v in request.json.items():
-            if v:
-                setattr(item, k, v)
+            setattr(item, k, v)
         db.session.add(item)
         db.session.commit()
         return {}, 204
