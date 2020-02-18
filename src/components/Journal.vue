@@ -130,10 +130,27 @@ import axios from 'axios';
       // editedIndex=-1 which means we are creating a new
       // item because there was no item selected
       save () {
+        const new_item = {
+          name: this.editedItem.name,
+          amount: this.editedItem.amount,
+          record_date: this.editedItem.record_date, 
+          item_type_id: this.editedItem.item_type.id
+        }
+        // this.editedIndex and this.editedItem will be reset 
+        // to -1 and this.defaultItem when the form is closed
+        const editedIndex = this.editedIndex
+        const editedItem = this.editedItem
         if(this.editedIndex > -1) {
-          Object.assign(this.items[this.editedIndex], this.editedItem)
+          axios.put('http://192.168.1.105:5000/items/'+this.editedItem.id, new_item).then(() => {
+            Object.assign(this.items[editedIndex], editedItem)
+          })
+          Object.assign(this.items[editedIndex], this.editedItem)
         } else {
-          this.items.push(this.editedItem)
+          axios.post('http://192.168.1.105:5000/items', new_item).then(({ data }) => {
+            // should push the created item which has an id,
+            // instead of edited item, into items
+            this.items.push(data)
+          })
         }
         this.close()
       },
@@ -141,7 +158,9 @@ import axios from 'axios';
         const index_to_delete = this.items.indexOf(item)
         confirm('Are you sure you want to delete this item?') && 
         // splice() will also reindex the items array
-        this.items.splice(index_to_delete, 1)
+        axios.delete("http://192.168.1.105:5000/items/"+item.id).then(() => {
+          this.items.splice(index_to_delete, 1)
+        })
       }
     },
     mounted() {
