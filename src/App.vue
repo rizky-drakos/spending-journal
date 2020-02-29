@@ -5,6 +5,7 @@
       expand-on-hover
       permanent
       app
+      v-if="this.$route.path !== '/login' && this.$route.path !== '/'"
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
@@ -47,7 +48,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-content>
+    <v-content app>
       <v-container fluid>
         <router-view />
       </v-container>
@@ -60,6 +61,6 @@
   export default {
     data: () => ({
       
-    })
+    }) 
   }
 </script>
