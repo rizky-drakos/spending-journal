@@ -18,7 +18,7 @@
       <v-divider></v-divider>
       <v-list>
 
-        <v-list-item link to="/">
+        <v-list-item to="journal">
           <v-list-item-action>
             <v-icon>mdi-calendar-text-outline</v-icon>
           </v-list-item-action>
@@ -27,7 +27,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item link to="dashboard">
+        <v-list-item to="dashboard">
           <v-list-item-action>
             <v-icon>mdi-chart-bar</v-icon>
           </v-list-item-action>
@@ -36,12 +36,21 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item link to="item-types">
+        <v-list-item to="item-types">
           <v-list-item-action>
             <v-icon>mdi-shape-outline</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>ITEM TYPES</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item link v-on:click="signOut">
+          <v-list-item-action>
+            <v-icon>mdi-logout-variant</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>SIGN OUT</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -58,9 +67,20 @@
 </template>
 
 <script>
+import AutheticationStore from './stores/AuthenticationStore'
+
   export default {
-    data: () => ({
-      
-    }) 
+    methods: {
+      signOut() {
+        // window.gapi could be undefined if Login is
+        // loaded after Home, because Home is also
+        // responsible for window.gapi initialization
+        var self = this
+        window.gapi.auth2.getAuthInstance().signOut().then(() => {
+          AutheticationStore.data.isAuthenticated = false
+          self.$router.push("/")
+        });
+      }
+    }
   }
 </script>

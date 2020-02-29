@@ -3,8 +3,8 @@ import VueRouter from 'vue-router'
 import Journal from '@/components/Journal'
 import Dashboard from '@/components/Dashboard'
 import ItemTypes from '@/components/ItemTypes'
-import Login from '@/components/Login'
-import Home from '@/components/Home'
+import LandingPage from '@/components/LandingPage'
+import AutheticationStore from '../stores/AuthenticationStore'
 
 Vue.use(VueRouter)
 
@@ -25,20 +25,22 @@ const routes = [
     component: ItemTypes
   },
   {
-    path: '/login',
-    name: "Login",
-    component: Login
-  },
-  {
     path: '/',
-    name: "Home",
-    component: Home
+    name: "LandingPage",
+    component: LandingPage
   }
 ]
 
 const router = new VueRouter({
   mode: 'history',
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // if the user is not authenticated
+  if (to.name !== "LandingPage" && !AutheticationStore.data.isAuthenticated) next({ name: "LandingPage" })
+  // if the user has been authenticated
+  else next()
 })
 
 export default router
