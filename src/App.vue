@@ -1,6 +1,5 @@
 <template>
   <v-app id="inspire">
-
     <v-navigation-drawer
       expand-on-hover
       permanent
@@ -17,7 +16,6 @@
 
       <v-divider></v-divider>
       <v-list>
-
         <v-list-item to="journal">
           <v-list-item-action>
             <v-icon>mdi-calendar-text-outline</v-icon>
@@ -53,7 +51,6 @@
             <v-list-item-title>SIGN OUT</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
       </v-list>
     </v-navigation-drawer>
 
@@ -62,25 +59,41 @@
         <router-view />
       </v-container>
     </v-content>
-
   </v-app>
 </template>
 
 <script>
-import AutheticationStore from './stores/AuthenticationStore'
+import AutheticationStore from "./stores/AuthenticationStore"
 
-  export default {
-    methods: {
-      signOut() {
-        // window.gapi could be undefined if Login is
-        // loaded after Home, because Home is also
-        // responsible for window.gapi initialization
-        var self = this
-        window.gapi.auth2.getAuthInstance().signOut().then(() => {
+export default {
+  mounted() {
+    const gapi_plugin = document.createElement("script");
+    gapi_plugin.setAttribute("src", "https://apis.google.com/js/platform.js");
+    gapi_plugin.async = true;
+    gapi_plugin.defer = true;
+    gapi_plugin.onload = () => {
+      window.gapi.load('auth2', function() {
+        window.gapi.auth2.init();
+      })
+    };
+    document.head.appendChild(gapi_plugin);
+  },  
+  methods: {
+    signOut() {
+      // window.gapi could be undefined if Login is
+      // loaded after Home, because Home is also
+      // responsible for window.gapi initialization
+      var self = this;
+      window.gapi.auth2
+        .getAuthInstance()
+        .signOut()
+        .then(() => {
           AutheticationStore.data.isAuthenticated = false
-          self.$router.push("/")
+          localStorage.removeItem("user")
+          self.$router.push("/");
+          console.log("signed out")
         });
-      }
     }
   }
+}
 </script>

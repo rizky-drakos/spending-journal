@@ -9,26 +9,33 @@
 </template>
 
 <script>
-import AutheticationStore from "../stores/AuthenticationStore";
+import AutheticationStore from "../stores/AuthenticationStore"
+import axios from 'axios'
 
 export default {
   mounted() {
-    const gapi_plugin = document.createElement("script");
-    gapi_plugin.setAttribute("src", "https://apis.google.com/js/platform.js");
-    gapi_plugin.async = true;
-    gapi_plugin.defer = true;
+    const gapi_plugin = document.createElement("script")
+    gapi_plugin.setAttribute("src", "https://apis.google.com/js/platform.js")
+    gapi_plugin.async = true
+    gapi_plugin.defer = true
     gapi_plugin.onload = () => {
       window.gapi.signin2.render("google-signin-btn", {
         onsuccess: this.onSignIn
-      });
-    };
-    document.head.appendChild(gapi_plugin);
+      })
+    }
+    document.head.appendChild(gapi_plugin)
   },
   methods: {
-    onSignIn() {
-      AutheticationStore.data.isAuthenticated = true;
-      this.$router.push("/journal");
+    onSignIn(user) {
+      if (localStorage.getItem("user") == null) {
+        axios.post("http://localhost:3000/login", {"id_token": user.getAuthResponse().id_token})
+        .then(({ data }) => {
+          localStorage.setItem("user", JSON.stringify(data))
+          AutheticationStore.data.isAuthenticated = true
+          this.$router.push("/journal")
+        })
+      }
     }
   }
-};
+}
 </script>

@@ -4,7 +4,7 @@ import Journal from '@/components/Journal'
 import Dashboard from '@/components/Dashboard'
 import ItemTypes from '@/components/ItemTypes'
 import LandingPage from '@/components/LandingPage'
-import AutheticationStore from '../stores/AuthenticationStore'
+// import AutheticationStore from '../stores/AuthenticationStore' 
 
 Vue.use(VueRouter)
 
@@ -37,10 +37,17 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // if the user is not authenticated
-  if (to.name !== "LandingPage" && !AutheticationStore.data.isAuthenticated) next({ name: "LandingPage" })
-  // if the user has been authenticated
-  else next()
+  if (to.name !== "LandingPage" && localStorage.getItem("user") == null) {
+    console.log("From A " + to.name)
+    next({ name: "LandingPage" })
+  }
+  else if (to.name == "LandingPage" && localStorage.getItem("user") !== null) {
+    console.log("From B " + to.name )
+    next({ name: "Journal" })
+  } else {
+    console.log("From C " + to.name)
+    next()
+  }
 })
 
 export default router

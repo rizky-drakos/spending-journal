@@ -86,98 +86,106 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
-  export default {
-    data: () => ({
-      headers: [
-        { text: "Item", value: "name", align: "left", sortable: false },
-        { text: "Type", value: "item_type.name", align: "left", sortable: false},
-        { text: "Amount (Thousand VND)", value: "amount", align: "left", sortable: false},
-        { text: "Date", value: "record_date", align: "left", sortable: false},
-        { text: 'Actions', value: 'action', align: "right", sortable: false }
-      ],
-      item_types: [],
-      items: [],
-      editedIndex: -1,
-      editedItem: {
-        name: "",
-        item_type: {},
-        amount: "",
-        record_date: ""
-      },
-      defaultItem: {
-        name: "",
-        item_type: "",
-        amount: "",
-        record_date: ""
-      },
-      dialog: false,
-      menu: false,
-    }),
-    methods: {
-      close () {
-        this.dialog = false
-        this.editedIndex = -1
-        this.editedItem = Object.assign({}, this.defaultItem)
-      },
-      editItem (item) {
-        this.editedIndex = this.items.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-      // save() works for both editing and creating items
-      // editedIndex=-1 which means we are creating a new
-      // item because there was no item selected
-      save () {
-        const new_item = {
-          name: this.editedItem.name,
-          amount: this.editedItem.amount,
-          record_date: this.editedItem.record_date, 
-          item_type_id: this.editedItem.item_type.id
-        }
-        // this.editedIndex and this.editedItem will be reset 
-        // to -1 and this.defaultItem when the form is closed
-        const editedIndex = this.editedIndex
-        const editedItem = this.editedItem
-        if(this.editedIndex > -1) {
-          axios.put('http://192.168.1.105:5000/items/'+this.editedItem.id, new_item).then(() => {
-            Object.assign(this.items[editedIndex], editedItem)
-          })
-          Object.assign(this.items[editedIndex], this.editedItem)
-        } else {
-          axios.post('http://192.168.1.105:5000/items', new_item).then(({ data }) => {
-            // should push the created item which has an id,
-            // instead of edited item, into items
-            this.items.push(data)
-          })
-        }
-        this.close()
-      },
-      deleteItem (item) {
-        const index_to_delete = this.items.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && 
-        // splice() will also reindex the items array
-        axios.delete("http://192.168.1.105:5000/items/"+item.id).then(() => {
-          this.items.splice(index_to_delete, 1)
+export default {
+  data: () => ({
+    headers: [
+      { text: "Item", value: "name", align: "left", sortable: false },
+      { text: "Type", value: "item_type.name", align: "left", sortable: false},
+      { text: "Amount (Thousand VND)", value: "amount", align: "left", sortable: false},
+      { text: "Date", value: "record_date", align: "left", sortable: false},
+      { text: 'Actions', value: 'action', align: "right", sortable: false }
+    ],
+    item_types: [],
+    items: [],
+    editedIndex: -1,
+    editedItem: {
+      name: "",
+      item_type: {},
+      amount: "",
+      record_date: ""
+    },
+    defaultItem: {
+      name: "",
+      item_type: "",
+      amount: "",
+      record_date: ""
+    },
+    dialog: false,
+    menu: false,
+  }),
+  methods: {
+    close () {
+      this.dialog = false
+      this.editedIndex = -1
+      this.editedItem = Object.assign({}, this.defaultItem)
+    },
+    editItem (item) {
+      this.editedIndex = this.items.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true
+    },
+    // save() works for both editing and creating items
+    // editedIndex=-1 which means we are creating a new
+    // item because there was no item selected
+    save () {
+      const new_item = {
+        name: this.editedItem.name,
+        amount: this.editedItem.amount,
+        record_date: this.editedItem.record_date, 
+        item_type_id: this.editedItem.item_type.id
+      }
+      // this.editedIndex and this.editedItem will be reset 
+      // to -1 and this.defaultItem when the form is closed
+      const editedIndex = this.editedIndex
+      const editedItem = this.editedItem
+      if(this.editedIndex > -1) {
+        axios.put('http://192.168.1.100:5000/items/'+this.editedItem.id, new_item).then(() => {
+          Object.assign(this.items[editedIndex], editedItem)
+        })
+        Object.assign(this.items[editedIndex], this.editedItem)
+      } else {
+        axios.post('http://192.168.1.100:5000/items', new_item).then(({ data }) => {
+          // should push the created item which has an id,
+          // instead of edited item, into items
+          this.items.push(data)
         })
       }
+      this.close()
     },
-    mounted() {
-      axios.get('http://192.168.1.105:5000/items')
-      .then(response => {
-        this.items = response.data
-      }), 
-      axios.get('http://192.168.1.105:5000/item-types')
-      .then(response => {
-        this.item_types = response.data;
+    deleteItem (item) {
+      const index_to_delete = this.items.indexOf(item)
+      confirm('Are you sure you want to delete this item?') && 
+      // splice() will also reindex the items array
+      axios.delete("http://192.168.1.100:5000/items/"+item.id).then(() => {
+        this.items.splice(index_to_delete, 1)
       })
-    },
-    watch: {
-      dialog (val) {
-        // call close() when the dialog is closed.
-        val || this.close()
+    }
+  },
+  mounted() {
+    const ACCESS_TOKEN = JSON.parse(localStorage.getItem("user"))["access_token"]
+    axios.get('http://192.168.1.100:5000/items', {
+      headers: {
+        "Authorization": `Bearer ${ACCESS_TOKEN}`
       }
-    },
-  }
+    })
+    .then(response => {
+      this.items = response.data
+    })
+    axios.get('http://192.168.1.100:5000/item-types', {
+      headers: {
+        "Authorization": `Bearer ${ACCESS_TOKEN}`
+      }
+    }).then(response => {
+      this.item_types = response.data;
+    })
+  },
+  watch: {
+    dialog (val) {
+      // call close() when the dialog is closed.
+      val || this.close()
+    }
+  },
+}
 </script>

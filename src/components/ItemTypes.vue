@@ -18,7 +18,12 @@ import axios from 'axios';
       item_types: [],
     }),
     mounted() {
-      axios.get('http://192.168.1.105:5000/item-types')
+      const ACCESS_TOKEN = JSON.parse(localStorage.getItem("user"))["access_token"]
+      axios.get('http://192.168.1.100:5000/item-types', {
+        headers: {
+          "Authorization": `Bearer ${ACCESS_TOKEN}`
+        }
+      })
       .then(response => {
         this.item_types = response.data;
       })
