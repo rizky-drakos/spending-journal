@@ -1,17 +1,19 @@
 from flask import Flask
 from flask_cors import CORS
 
-from extentions import api, db, ma
+from extentions import api, db, ma, jwt
 from resources.item import Item, Items
 from resources.item_type import ItemType, ItemTypes
 
 app = Flask(__name__)
-cors = CORS(app, resourcesr="/*")
+cors = CORS(app, resources="/*")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     "mysql+pymysql://root:rootroot@mysql-container/mydb"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['SQLALCHEMY_ECHO'] = True
+app.config['JWT_SECRET_KEY'] = \
+    '672B93FD95B542EABD0E5E4A5FF41413F3894E2C7C21B57390A069B7E5EC86D2'
 
 api.add_resource(ItemType, "/item-types/<int:id>", endpoint="item-type")
 api.add_resource(ItemTypes, "/item-types", endpoint="item-types")
@@ -21,3 +23,4 @@ api.add_resource(Items, "/items", endpoint="items")
 api.init_app(app)
 db.init_app(app)
 ma.init_app(app)
+jwt.init_app(app)
