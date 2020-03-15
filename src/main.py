@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 
-from extentions import api, db, ma, jwt
+from extentions import api, db, ma, jwt, migrate
 from resources.item import Item, Items
 from resources.item_type import ItemType, ItemTypes
 
@@ -24,3 +24,4 @@ api.init_app(app)
 db.init_app(app)
 ma.init_app(app)
 jwt.init_app(app)
+migrate.init_app(app, db)

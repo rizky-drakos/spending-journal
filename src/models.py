@@ -1,6 +1,18 @@
 from extentions import db, ma
 
 
+class UserModel(db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32))
+    email = db.Column(db.String(64), nullable=False, unique=True)
+    items = db.relationship(
+        "ItemModel",
+        backref="user",
+        cascade="all, delete-orphan"
+    )
+
+
 class ItemTypeModel(db.Model):
     __tablename__ = "item_types"
     id = db.Column(db.Integer, primary_key=True)
@@ -20,6 +32,10 @@ class ItemModel(db.Model):
     amount = db.Column(db.Integer, nullable=False)
     item_type_id = db.Column(
         db.Integer, db.ForeignKey("item_types.id"),
+        nullable=False
+    )
+    user_id = db.Column(
+        db.Integer, db.ForeignKey("users.id"),
         nullable=False
     )
 
