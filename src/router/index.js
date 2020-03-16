@@ -4,7 +4,6 @@ import Journal from '@/components/Journal'
 import Dashboard from '@/components/Dashboard'
 import ItemTypes from '@/components/ItemTypes'
 import LandingPage from '@/components/LandingPage'
-// import AutheticationStore from '../stores/AuthenticationStore' 
 
 Vue.use(VueRouter)
 
@@ -37,11 +36,11 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== "LandingPage" && localStorage.getItem("user") == null) {
+  if (to.name !== "LandingPage" && localStorage.getItem("access_token") == null) {
     console.log("From A " + to.name)
     next({ name: "LandingPage" })
   }
-  else if (to.name == "LandingPage" && localStorage.getItem("user") !== null) {
+  else if (to.name == "LandingPage" && localStorage.getItem("access_token") !== null) {
     console.log("From B " + to.name )
     next({ name: "Journal" })
   } else {

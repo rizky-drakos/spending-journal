@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import { TokenService } from '../services/token.service'
 
   export default {
     data: () => ({
@@ -18,10 +19,9 @@ import axios from 'axios';
       item_types: [],
     }),
     mounted() {
-      const ACCESS_TOKEN = JSON.parse(localStorage.getItem("user"))["access_token"]
       axios.get('http://192.168.1.100:5000/item-types', {
         headers: {
-          "Authorization": `Bearer ${ACCESS_TOKEN}`
+          "Authorization": `Bearer ${TokenService.get_token()}`
         }
       })
       .then(response => {

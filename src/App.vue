@@ -63,8 +63,6 @@
 </template>
 
 <script>
-import AutheticationStore from "./stores/AuthenticationStore"
-
 export default {
   mounted() {
     const gapi_plugin = document.createElement("script");
@@ -80,17 +78,13 @@ export default {
   },  
   methods: {
     signOut() {
-      // window.gapi could be undefined if Login is
-      // loaded after Home, because Home is also
-      // responsible for window.gapi initialization
       var self = this;
       window.gapi.auth2
         .getAuthInstance()
         .signOut()
         .then(() => {
-          AutheticationStore.data.isAuthenticated = false
-          localStorage.removeItem("user")
-          self.$router.push("/");
+          localStorage.removeItem("access_token")
+          self.$router.push("/")
           console.log("signed out")
         });
     }

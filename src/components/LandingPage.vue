@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import AutheticationStore from "../stores/AuthenticationStore"
+import { TokenService } from "../services/token.service"
 import axios from 'axios'
 
 export default {
@@ -27,11 +27,10 @@ export default {
   },
   methods: {
     onSignIn(user) {
-      if (localStorage.getItem("user") == null) {
+      if (!TokenService.get_token()) {
         axios.post("http://localhost:3000/login", {"id_token": user.getAuthResponse().id_token})
         .then(({ data }) => {
-          localStorage.setItem("user", JSON.stringify(data))
-          AutheticationStore.data.isAuthenticated = true
+          TokenService.save_token(data["access_token"])
           this.$router.push("/journal")
         })
       }
