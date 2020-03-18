@@ -86,8 +86,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { TokenService } from '../services/token.service'
+import ApiService from '../services/api.service'
 
 export default {
   data: () => ({
@@ -130,7 +129,7 @@ export default {
     // save() works for both editing and creating items
     // editedIndex=-1 which means we are creating a new
     // item because there was no item selected
-    save () {
+    async save () {
       const new_item = {
         name: this.editedItem.name,
         amount: this.editedItem.amount,
@@ -142,44 +141,33 @@ export default {
       const editedIndex = this.editedIndex
       const editedItem = this.editedItem
       if(this.editedIndex > -1) {
-        axios.put('http://192.168.1.100:5000/items/'+this.editedItem.id, new_item).then(() => {
+        const { status } = await ApiService.put('/items/'+this.editedItem.id, new_item)
+        if (status===204) {
           Object.assign(this.items[editedIndex], editedItem)
-        })
-        Object.assign(this.items[editedIndex], this.editedItem)
+        }
       } else {
-        axios.post('http://192.168.1.100:5000/items', new_item).then(({ data }) => {
-          // should push the created item which has an id,
-          // instead of edited item, into items
+        // the created item, which has an id,
+        // should be pushed into items instead of the edited item
+        const { status, data } = await ApiService.post("/items", new_item)
+        if (status===201) {
           this.items.push(data)
-        })
+        }
       }
       this.close()
     },
-    deleteItem (item) {
+    async deleteItem (item) {
       const index_to_delete = this.items.indexOf(item)
       confirm('Are you sure you want to delete this item?') && 
       // splice() will also reindex the items array
-      axios.delete("http://192.168.1.100:5000/items/"+item.id).then(() => {
-        this.items.splice(index_to_delete, 1)
-      })
+      await ApiService.delete("/items/"+item.id)
+      this.items.splice(index_to_delete, 1)
     }
   },
-  mounted() {
-    axios.get('http://192.168.1.100:5000/items', {
-      headers: {
-        "Authorization": `Bearer ${TokenService.get_token()}`
-      }
-    })
-    .then(response => {
-      this.items = response.data
-    })
-    axios.get('http://192.168.1.100:5000/item-types', {
-      headers: {
-        "Authorization": `Bearer ${TokenService.get_token()}`
-      }
-    }).then(response => {
-      this.item_types = response.data;
-    })
+  async mounted() {
+    const { data: items} = await ApiService.get('/items')
+    this.items = items
+    const { data: item_types } = await ApiService.get('/item-types')
+    this.item_types = item_types
   },
   watch: {
     dialog (val) {

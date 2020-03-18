@@ -9,7 +9,7 @@
 
 <script>
 import axios from 'axios'
-import { TokenService } from '../services/token.service'
+import TokenService from '../services/token.service'
 
   export default {
     data: () => ({

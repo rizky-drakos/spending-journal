@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import TokenService from './services/token.service'
+
 export default {
   mounted() {
     const gapi_plugin = document.createElement("script");
@@ -83,7 +85,7 @@ export default {
         .getAuthInstance()
         .signOut()
         .then(() => {
-          localStorage.removeItem("access_token")
+          TokenService.remove_token()
           self.$router.push("/")
           console.log("signed out")
         });

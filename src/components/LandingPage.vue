@@ -9,8 +9,11 @@
 </template>
 
 <script>
-import { TokenService } from "../services/token.service"
-import axios from 'axios'
+// import axios from 'axios'
+
+import TokenService from "../services/token.service"
+import ApiService from "../services/api.service"
+
 
 export default {
   mounted() {
@@ -26,14 +29,18 @@ export default {
     document.head.appendChild(gapi_plugin)
   },
   methods: {
-    onSignIn(user) {
-      if (!TokenService.get_token()) {
-        axios.post("http://localhost:3000/login", {"id_token": user.getAuthResponse().id_token})
-        .then(({ data }) => {
-          TokenService.save_token(data["access_token"])
-          this.$router.push("/journal")
-        })
-      }
+    async onSignIn(user) {
+      const { data } = await ApiService.make_custom_request({
+        method: "post",
+        url: "http://192.168.1.100:3000/login",
+        data: {
+          "id_token": user.getAuthResponse().id_token
+        }
+      })
+      const access_token = data["access_token"]
+      TokenService.save_token(access_token)
+      ApiService.set_access_token()
+      this.$router.push("/journal")
     }
   }
 }

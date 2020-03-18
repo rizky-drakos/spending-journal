@@ -37,14 +37,14 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.name !== "LandingPage" && localStorage.getItem("access_token") == null) {
-    console.log("From A " + to.name)
+    // console.log("From A " + to.name)
     next({ name: "LandingPage" })
   }
   else if (to.name == "LandingPage" && localStorage.getItem("access_token") !== null) {
-    console.log("From B " + to.name )
+    // console.log("From B " + to.name )
     next({ name: "Journal" })
   } else {
-    console.log("From C " + to.name)
+    // console.log("From C " + to.name)
     next()
   }
 })
