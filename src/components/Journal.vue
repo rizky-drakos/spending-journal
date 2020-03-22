@@ -17,46 +17,49 @@
                     <span>Form</span>
                   </v-card-title>
                   <v-card-text>
+                    <v-form ref="form">
                     <v-container>
                       <v-row>
-                        <v-col cols="12" md="3">
-                          <v-text-field autofocus v-model="editedItem.name" label="Item" clearable outlined append-icon="mdi-cart-outline" dense></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="3">
-                          <v-select
-                            v-model="editedItem.item_type"
-                            dense
-                            :items="item_types"
-                            outlined
-                            item-text="name"
-                            return-object
-                            append-icon="mdi-shape-outline"
-                            label="Type">
-                          </v-select>
-                        </v-col>
-                        <v-col cols="12" md="3">
-                            <v-menu offset-y v-model="menu">
-                              <template v-slot:activator="{ on }">
-                                <v-text-field
-                                  v-on="on" 
+                          <v-col cols="12" md="3">
+                            <v-text-field autofocus v-model="editedItem.name" 
+                            label="Item" clearable 
+                            outlined append-icon="mdi-cart-outline" 
+                            dense :rules="[rules.required]">
+                            </v-text-field>
+                          </v-col>
+                          <v-col cols="12" md="3">
+                            <v-select v-model="editedItem.item_type" dense clearable
+                              :items="item_types" outlined :rules="[rules.required]"
+                              item-text="name" return-object
+                              append-icon="mdi-shape-outline" label="Type">
+                            </v-select>
+                          </v-col>
+                          <v-col cols="12" md="3">
+                              <v-menu offset-y v-model="menu">
+                                <template v-slot:activator="{ on }">
+                                  <v-text-field v-on="on" v-model="editedItem.record_date" 
+                                    label="Date" readonly
+                                    append-icon="mdi-calendar-today" outlined 
+                                    dense :rules="[rules.required]">
+                                  </v-text-field>
+                                </template>
+                                <v-date-picker 
                                   v-model="editedItem.record_date" 
-                                  label="Date"
-                                  readonly
-                                  append-icon="mdi-calendar-today"
-                                  outlined dense>
-                                </v-text-field>
-                              </template>
-                              <v-date-picker 
-                                v-model="editedItem.record_date" 
-                                no-title scrollable offset-y>
-                              </v-date-picker>
-                            </v-menu>
-                        </v-col>
-                        <v-col cols="12" md="3">
-                          <v-text-field type="number" v-model="editedItem.amount" label="Amount" clearable outlined append-icon="mdi-currency-usd" dense></v-text-field>
-                        </v-col>
+                                  no-title scrollable offset-y
+                                  :rules="[rules.required]">
+                                </v-date-picker>
+                              </v-menu>
+                          </v-col>
+                          <v-col cols="12" md="3">
+                            <v-text-field type="number" v-model="editedItem.amount" 
+                            label="Amount" clearable 
+                            outlined append-icon="mdi-currency-usd" 
+                            dense :rules="[rules.required]">
+                            </v-text-field>
+                          </v-col>
                       </v-row>
                     </v-container>
+                    </v-form>
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -114,12 +117,18 @@ export default {
     },
     dialog: false,
     menu: false,
+    rules: {
+      required: value => {
+        return !!value || "Required"
+      }
+    }
   }),
   methods: {
     close () {
       this.dialog = false
       this.editedIndex = -1
       this.editedItem = Object.assign({}, this.defaultItem)
+      this.$refs.form.resetValidation()
     },
     editItem (item) {
       this.editedIndex = this.items.indexOf(item)
@@ -130,30 +139,32 @@ export default {
     // editedIndex=-1 which means we are creating a new
     // item because there was no item selected
     async save () {
-      const new_item = {
-        name: this.editedItem.name,
-        amount: this.editedItem.amount,
-        record_date: this.editedItem.record_date, 
-        item_type_id: this.editedItem.item_type.id
-      }
-      // this.editedIndex and this.editedItem will be reset 
-      // to -1 and this.defaultItem when the form is closed
-      const editedIndex = this.editedIndex
-      const editedItem = this.editedItem
-      if(this.editedIndex > -1) {
-        const { status } = await ApiService.put('/items/'+this.editedItem.id, new_item)
-        if (status===204) {
-          Object.assign(this.items[editedIndex], editedItem)
+      if (this.$refs.form.validate()) {
+        const new_item = {
+          name: this.editedItem.name,
+          amount: this.editedItem.amount,
+          record_date: this.editedItem.record_date, 
+          item_type_id: this.editedItem.item_type.id
         }
-      } else {
-        // the created item, which has an id,
-        // should be pushed into items instead of the edited item
-        const { status, data } = await ApiService.post("/items", new_item)
-        if (status===201) {
-          this.items.push(data)
+        // this.editedIndex and this.editedItem will be reset 
+        // to -1 and this.defaultItem when the form is closed
+        const editedIndex = this.editedIndex
+        const editedItem = this.editedItem
+        if(this.editedIndex > -1) {
+          const { status } = await ApiService.put('/items/'+this.editedItem.id, new_item)
+          if (status===204) {
+            Object.assign(this.items[editedIndex], editedItem)
+          }
+        } else {
+          // the created item, which has an id,
+          // should be pushed into items instead of the edited item
+          const { status, data } = await ApiService.post("/items", new_item)
+          if (status===201) {
+            this.items.push(data)
+          }
         }
+        this.close()
       }
-      this.close()
     },
     async deleteItem (item) {
       const index_to_delete = this.items.indexOf(item)

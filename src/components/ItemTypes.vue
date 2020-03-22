@@ -15,13 +15,18 @@
                   <span>Form</span>
                 </v-card-title>
                 <v-card-text>
+                  <v-form ref="form">
                   <v-container>
                     <v-row>
                       <v-col cols="12">
-                        <v-text-field autofocus label="Item Type" v-model="editedItemType.name" clearable outlined append-icon="mdi-shape-outline" dense></v-text-field>
+                        <v-text-field autofocus label="Item Type" 
+                        v-model="editedItemType.name" clearable 
+                        outlined append-icon="mdi-shape-outline" 
+                        dense :rules="[rules.required]"></v-text-field>
                       </v-col>
                     </v-row>
                   </v-container>
+                  </v-form>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -70,6 +75,9 @@ import ApiService from '../services/api.service'
       defaultItemType: {
         name: ""
       },
+      rules: {
+        required: value => !!value || "Required"
+      }
     }),
     mounted() {
       axios.get('http://192.168.1.101:5000/item-types', {
@@ -86,25 +94,28 @@ import ApiService from '../services/api.service'
         this.dialog = false
         this.editedIndex = -1
         this.editedItemType = Object.assign({}, this.defaultItemType)
+        this.$refs.form.resetValidation()
       },
       async save () {
-        const new_item_type = {
-          name: this.editedItemType.name,
-        }
-        const editedIndex = this.editedIndex
-        const editedItemType = this.editedItemType
-        if (this.editedIndex > -1) {
-          const { status } = await ApiService.put("/item-types/"+this.editedItemType.id, new_item_type)
-          if (status===204) {
-            Object.assign(this.item_types[editedIndex], editedItemType)
+        if (this.$refs.form.validate()) {
+          const new_item_type = {
+            name: this.editedItemType.name,
           }
-        } else {
-          const { status, data } = await ApiService.post("/item-types", new_item_type)
-          if (status===201) {
-            this.item_types.push(data)
+          const editedIndex = this.editedIndex
+          const editedItemType = this.editedItemType
+          if (this.editedIndex > -1) {
+            const { status } = await ApiService.put("/item-types/"+this.editedItemType.id, new_item_type)
+            if (status===204) {
+              Object.assign(this.item_types[editedIndex], editedItemType)
+            }
+          } else {
+            const { status, data } = await ApiService.post("/item-types", new_item_type)
+            if (status===201) {
+              this.item_types.push(data)
+            }
           }
+          this.close()
         }
-        this.close()
       },
       editItem (item_type) {
         this.editedIndex = this.item_types.indexOf(item_type)
