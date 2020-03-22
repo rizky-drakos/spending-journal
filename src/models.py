@@ -11,12 +11,21 @@ class UserModel(db.Model):
         backref="user",
         cascade="all, delete-orphan"
     )
+    item_types = db.relationship(
+        "ItemTypeModel",
+        backref="user",
+        cascade="all, delete-orphan"
+    )
 
 
 class ItemTypeModel(db.Model):
     __tablename__ = "item_types"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey("users.id"),
+        nullable=False
+    )
     items = db.relationship(
         "ItemModel",
         backref="item_type",

@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from models import ItemTypeModel, ItemTypeSchema
 from extentions import db
@@ -39,12 +39,17 @@ class ItemTypes(Resource):
 
     @jwt_required
     def get(self):
-        item_types = ItemTypeModel.query.all()
+        user_id = get_jwt_identity()
+        item_types = ItemTypeModel.query.filter_by(user_id=user_id).all()
         return item_types_schema.dump(item_types)
 
     @jwt_required
     def post(self):
-        item_type_to_add = ItemTypeModel(name=request.json["name"])
+        user_id = get_jwt_identity()
+        item_type_to_add = ItemTypeModel(
+            name=request.json["name"],
+            user_id=user_id
+        )
         db.session.add(item_type_to_add)
         db.session.commit()
         return item_type_schema.dump(item_type_to_add), 201
