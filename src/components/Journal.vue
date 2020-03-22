@@ -37,10 +37,10 @@
                         <v-col cols="12" md="3">
                             <v-menu offset-y v-model="menu">
                               <template v-slot:activator="{ on }">
-                                <v-text-field 
+                                <v-text-field
                                   v-on="on" 
                                   v-model="editedItem.record_date" 
-                                  label="Date" 
+                                  label="Date"
                                   readonly
                                   append-icon="mdi-calendar-today"
                                   outlined dense>
@@ -81,7 +81,7 @@
             >
               mdi-delete-outline
             </v-icon>
-        </template>
+          </template>
       </v-data-table>
 </template>
 
@@ -157,10 +157,14 @@ export default {
     },
     async deleteItem (item) {
       const index_to_delete = this.items.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && 
+      const is_accepted = confirm('Are you sure you want to delete this item?')
       // splice() will also reindex the items array
-      await ApiService.delete("/items/"+item.id)
-      this.items.splice(index_to_delete, 1)
+      if (is_accepted) {
+        const { status } = await ApiService.delete("/items/"+item.id)
+        if (status===204) { 
+          this.items.splice(index_to_delete, 1)
+        }
+      }
     }
   },
   async mounted() {

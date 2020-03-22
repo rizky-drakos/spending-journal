@@ -9,7 +9,7 @@ import TokenService from "./services/token.service"
 
 Vue.config.productionTip = false
 
-ApiService.init("http://192.168.1.100:5000")
+ApiService.init("http://192.168.1.101:5000")
 // In case the user refreshes the page, headers
 // needs to be re-initialized.
 if(TokenService.get_token()) {
