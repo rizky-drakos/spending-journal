@@ -17,7 +17,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['JWT_SECRET_KEY'] = \
     '672B93FD95B542EABD0E5E4A5FF41413F3894E2C7C21B57390A069B7E5EC86D2'
-# app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(minutes=30)
+# app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(seconds=5)
 
 
 api.add_resource(ItemType, "/item-types/<int:id>", endpoint="item-type")

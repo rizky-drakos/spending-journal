@@ -28,5 +28,5 @@ class AccessToken(Resource):
             db.session.add(new_user)
             db.session.commit()
             logged_in_user = new_user
-        access_token = create_access_token(identity=logged_in_user.id, user_claims={"user_name": verified_token["name"]}, expires_delta=None)
+        access_token = create_access_token(identity=logged_in_user.id, user_claims={"user_name": verified_token["name"]}, expires_delta=False)
         return {"access_token": access_token}, 201
