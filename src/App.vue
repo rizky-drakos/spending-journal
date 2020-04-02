@@ -1,95 +1,19 @@
 <template>
-  <v-app id="inspire">
-    <v-navigation-drawer
-      expand-on-hover
-      permanent
-      app
-      v-if="this.$route.path !== '/login' && this.$route.path !== '/'"
-    >
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/40.jpg"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-title>John Leider</v-list-item-title>
-      </v-list-item>
-
-      <v-divider></v-divider>
-      <v-list>
-        <v-list-item to="journal">
-          <v-list-item-action>
-            <v-icon>mdi-calendar-text-outline</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>JOURNAL</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item to="dashboard">
-          <v-list-item-action>
-            <v-icon>mdi-chart-bar</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>DASHBOARD</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item to="item-types">
-          <v-list-item-action>
-            <v-icon>mdi-shape-outline</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>ITEM TYPES</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item link v-on:click="signOut">
-          <v-list-item-action>
-            <v-icon>mdi-logout-variant</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>SIGN OUT</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-content app>
-      <v-container fluid>
-        <router-view />
-      </v-container>
-    </v-content>
-  </v-app>
+  <component :is="layout">
+    <router-view/>
+  </component>
 </template>
 
 <script>
-import TokenService from './services/token.service'
 
 export default {
-  mounted() {
-    const gapi_plugin = document.createElement("script");
-    gapi_plugin.setAttribute("src", "https://apis.google.com/js/platform.js");
-    gapi_plugin.async = true;
-    gapi_plugin.defer = true;
-    gapi_plugin.onload = () => {
-      window.gapi.load('auth2', function() {
-        window.gapi.auth2.init();
-      })
-    };
-    document.head.appendChild(gapi_plugin);
-  },  
-  methods: {
-    signOut() {
-      var self = this;
-      window.gapi.auth2
-        .getAuthInstance()
-        .signOut()
-        .then(() => {
-          TokenService.remove_token()
-          self.$router.push("/")
-          console.log("signed out")
-        });
+  computed: {
+    layout () {
+      return this.$route.meta.layout + '-layout'
     }
+  },
+  mounted () {
+    console.log('From App')
   }
 }
 </script>

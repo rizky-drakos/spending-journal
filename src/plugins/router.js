@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Journal from '@/components/Journal'
-import Dashboard from '@/components/Dashboard'
-import ItemTypes from '@/components/ItemTypes'
-import LandingPage from '@/components/LandingPage'
+import Journal from '@/views/Journal'
+import Dashboard from '@/views/Dashboard'
+import ItemTypes from '@/views/ItemTypes'
+import LandingPage from '@/views/LandingPage'
+
 
 Vue.use(VueRouter)
 
@@ -11,21 +12,25 @@ const routes = [
   {
     path: '/journal',
     name: 'Journal',
+    meta: { layout: 'main' },
     component: Journal
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
+    meta: { layout: 'main' },
     component: Dashboard
   },
   {
     path: '/item-types',
     name: 'ItemTypes',
+    meta: { layout: 'main' },
     component: ItemTypes
   },
   {
     path: '/',
     name: "LandingPage",
+    meta: { layout: 'landing' },
     component: LandingPage
   }
 ]

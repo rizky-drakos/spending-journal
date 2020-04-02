@@ -9,8 +9,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
-
 import TokenService from "../services/token.service"
 import ApiService from "../services/api.service"
 
@@ -27,12 +25,13 @@ export default {
       })
     }
     document.head.appendChild(gapi_plugin)
+    console.log("From Landing page")
   },
   methods: {
     async onSignIn(user) {
       const { data } = await ApiService.make_custom_request({
         method: "post",
-        url: "http://192.168.1.101:5000/access-token",
+        url: "http://192.168.1.106:5000/access-token",
         data: {
           "id_token": user.getAuthResponse().id_token
         }
