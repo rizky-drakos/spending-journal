@@ -23,10 +23,11 @@ class AccessToken(Resource):
         if not logged_in_user:
             new_user = UserModel(
                 name = verified_token["name"],
-                email = verified_token["email"]
+                email = verified_token["email"],
+                picture_url = verified_token["picture"]
             )
             db.session.add(new_user)
             db.session.commit()
             logged_in_user = new_user
-        access_token = create_access_token(identity=logged_in_user.id, user_claims={"user_name": verified_token["name"]}, expires_delta=False)
+        access_token = create_access_token(identity=logged_in_user.id, expires_delta=False)
         return {"access_token": access_token}, 201

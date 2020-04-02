@@ -6,6 +6,7 @@ class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32))
     email = db.Column(db.String(64), nullable=False, unique=True)
+    picture_url = db.Column(db.String(256), nullable=False, unique=True)
     items = db.relationship(
         "ItemModel",
         backref="user",
@@ -47,6 +48,11 @@ class ItemModel(db.Model):
         db.Integer, db.ForeignKey("users.id"),
         nullable=False
     )
+
+
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        fields = ("name", "picture_url")
 
 
 class ItemTypeSchema(ma.ModelSchema):
