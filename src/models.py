@@ -50,6 +50,11 @@ class ItemModel(db.Model):
     )
 
 
+class CostByItemTypesSchema(ma.ModelSchema):
+    class Meta:
+        fields = ("name", "cost")
+
+
 class UserSchema(ma.ModelSchema):
     class Meta:
         fields = ("name", "picture_url")

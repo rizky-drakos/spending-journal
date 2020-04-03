@@ -7,6 +7,7 @@ from extentions import api, db, ma, jwt, migrate
 from resources.item import Item, Items
 from resources.item_type import ItemType, ItemTypes
 from resources.user import User
+from resources.cost_by_item_types import CostByItemTypes
 from resources.access_token import AccessToken
 
 app = Flask(__name__)
@@ -28,6 +29,8 @@ api.add_resource(Item, "/items/<int:id>", endpoint="item")
 api.add_resource(Items, "/items", endpoint="items")
 
 api.add_resource(User, "/user", endpoint="user")
+
+api.add_resource(CostByItemTypes, "/cost-by-item-types", endpoint="cost-by-item-types")
 
 api.add_resource(AccessToken, "/access-token", endpoint="access-token")
 
