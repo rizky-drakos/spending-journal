@@ -30,7 +30,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" md="3">
-                    <v-select 
+                    <v-select
                       v-model="editedItem.item_type" dense clearable
                       :items="item_types" outlined :rules="[rules.required]"
                       item-text="name" return-object

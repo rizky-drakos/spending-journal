@@ -56,7 +56,7 @@
     </v-navigation-drawer>
 
     <v-content app>
-      <v-container fluid>
+      <v-container>
         <slot></slot>
       </v-container>
     </v-content>

@@ -10,7 +10,7 @@ import Main from './layouts/Main.vue'
 
 Vue.config.productionTip = false
 
-ApiService.init("http://192.168.1.106:5000")
+ApiService.init("http://192.168.1.103:5000")
 // In case the user refreshes the page, headers
 // needs to be re-initialized.
 if(TokenService.get_token()) {
