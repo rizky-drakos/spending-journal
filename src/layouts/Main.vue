@@ -56,9 +56,7 @@
     </v-navigation-drawer>
 
     <v-content app>
-      <v-container>
-        <slot></slot>
-      </v-container>
+      <slot></slot>
     </v-content>
   </v-app>
 </template>
