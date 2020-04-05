@@ -6,7 +6,11 @@
                 :headers="headers"
                 :items="cost_by_item_types"
                 sort-by="name"
-              ></v-data-table>
+              >
+                <template v-slot:top>
+                  <h2>Total: {{ total.toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}</h2>
+                </template>
+              </v-data-table>
           </v-col>
           <v-col cols="3" text-align="center">
             <v-date-picker v-model="month_of_year" type="month"></v-date-picker>
@@ -29,7 +33,8 @@ export default {
     month_of_year: new Date().toISOString().substr(0, 7),
     year: new Date().toISOString().substr(0, 4),
     month: new Date().toISOString().substr(5, 2),
-    cost_by_item_types: []
+    cost_by_item_types: [],
+    total: 0
   }),
   methods: {
     async fetch_cost_by_item_types () {
@@ -37,7 +42,11 @@ export default {
         "/cost-by-item-types",
         { year: this.year, month: this.month }
       )
-      this.cost_by_item_types = cost_by_item_types
+      this.cost_by_item_types = cost_by_item_types.map(
+        item => ({...item, cost: item["cost"].toLocaleString('vi', {style : 'currency', currency : 'VND'})})
+      )
+      console.log(this.cost_by_item_types)
+      this.total = cost_by_item_types.map(item => item["cost"]).reduce((current, next) => current + next)
     }
   },
   watch: {
