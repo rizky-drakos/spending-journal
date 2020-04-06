@@ -176,7 +176,9 @@ export default {
   },
   async mounted() {
     const { data: items} = await ApiService.get('/items')
-    this.items = items
+    this.items = items.map(
+        item => ({...item, amount: item["amount"].toLocaleString('vi', {style : 'currency', currency : 'VND'})})
+    )
     const { data: item_types } = await ApiService.get('/item-types')
     this.item_types = item_types
   },
