@@ -8,6 +8,9 @@
         sort-by="record_date"
         :sort-desc="true"
       >
+        <template v-slot:item.amount="{ item }">
+          {{ item.amount.toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
+        </template>
         <template v-slot:top>
           <v-toolbar flat color="white">
             <v-spacer></v-spacer>
@@ -176,9 +179,7 @@ export default {
   },
   async mounted() {
     const { data: items} = await ApiService.get('/items')
-    this.items = items.map(
-        item => ({...item, amount: item["amount"].toLocaleString('vi', {style : 'currency', currency : 'VND'})})
-    )
+    this.items = items
     const { data: item_types } = await ApiService.get('/item-types')
     this.item_types = item_types
   },

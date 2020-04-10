@@ -7,6 +7,9 @@
                 :items="cost_by_item_types"
                 sort-by="name"
               >
+                <template v-slot:item.cost="{ item }">
+                  {{ item.cost.toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
+                </template>
                 <template v-slot:top>
                   <h2>Total: {{ total }}</h2>
                 </template>
@@ -42,9 +45,7 @@ export default {
         "/cost-by-item-types",
         { year: this.year, month: this.month }
       )
-      this.cost_by_item_types = cost_by_item_types.map(
-        item => ({...item, cost: item["cost"].toLocaleString('vi', {style : 'currency', currency : 'VND'})})
-      )
+      this.cost_by_item_types = cost_by_item_types
       this.total = cost_by_item_types.map(item => item["cost"]).reduce((current, next) => current + next).toLocaleString('vi', {style : 'currency', currency : 'VND'})
     }
   },
