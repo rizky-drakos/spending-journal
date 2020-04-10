@@ -9,7 +9,7 @@
         :sort-desc="true"
       >
         <template v-slot:item.amount="{ item }">
-          {{ item.amount.toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
+          {{ Number(item.amount).toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
         </template>
         <template v-slot:top>
           <v-toolbar flat color="white">
@@ -152,7 +152,8 @@ export default {
         if(this.editedIndex > -1) {
           const { status } = await ApiService.put('/items/'+this.editedItem.id, new_item)
           if (status===204) {
-            Object.assign(this.items[editedIndex], editedItem)
+            // Object.assign(this.items[editedIndex], editedItem)
+            this.items.splice(editedIndex, 1, editedItem)
           }
         } else {
           // the created item, which has an id,
@@ -187,7 +188,7 @@ export default {
     dialog (val) {
       // call close() when the dialog is closed.
       val || this.close()
-    }
+    },
   },
 }
 </script>
