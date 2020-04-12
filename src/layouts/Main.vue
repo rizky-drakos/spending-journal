@@ -4,7 +4,6 @@
       expand-on-hover
       permanent
       app
-      v-if="this.$route.path !== '/login' && this.$route.path !== '/'"
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
