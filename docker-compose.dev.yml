@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+      args: 
+        UID: ${UID}
+        GID: ${GID}
+    image: api:dev
+    container_name: api
+    env_file: ./api/.env.dev
+    volumes: 
+      - type: bind
+        source: ./api
+        target: /home/default/api
+    ports: 
+      - "5000:5000"
+    
+networks:
+  default:
+    external:
+      name: my-net
