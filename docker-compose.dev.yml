@@ -10,6 +10,7 @@ services:
         GID: ${GID}
     image: api:dev
     container_name: api
+    restart: always
     env_file: ./api/.env.dev
     volumes: 
       - type: bind
