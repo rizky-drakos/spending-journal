@@ -5,7 +5,7 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile.dev
-      args: 
+      args:
         UID: ${UID}
         GID: ${GID}
     image: api:dev
@@ -13,13 +13,27 @@ services:
     restart: always
     env_file: ./api/.env.dev
     volumes: 
-      - type: bind
-        source: ./api
-        target: /home/default/api
+      - "./api:/home/default/api"
     ports: 
       - "5000:5000"
-    
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    image: web:dev
+    container_name: web
+    restart: always
+    volumes:
+      - "./web:/home/node/web"
+    ports:
+      - "8080:8080"
+    networks: 
+      - frontend
+    depends_on: 
+      - api
+
 networks:
+  frontend:
   default:
     external:
       name: my-net
