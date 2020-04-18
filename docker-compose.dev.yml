@@ -4,6 +4,7 @@ services:
   db:
     image: mysql/mysql-server:5.7
     container_name: db
+    restart: always
     volumes: 
       - "/var/lib/docker/volumes/455163fdef4072553c8d8303d53292431c2696a2c61f3f2137e3eca65d5b233d/_data:/var/lib/mysql"
     networks: 
