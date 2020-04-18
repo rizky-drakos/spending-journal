@@ -1,0 +1,51 @@
+version: '3.7'
+
+services: 
+    nginx:
+        build:
+            context: .
+            dockerfile: ./nginx/Dockerfile.prod
+        image: nginx:prod
+        container_name: nginx
+        restart: always
+        ports: 
+            - "80:80"
+        depends_on: 
+            - api
+        networks:
+            - frontend
+    db:
+        image: mysql/mysql-server:5.7
+        container_name: db
+        restart: always
+        volumes: 
+            - "spending-journal:/var/lib/mysql"
+        networks: 
+            - backend
+    api:
+        build:
+            context: ./api
+            dockerfile: Dockerfile.dev
+            args:
+                UID: ${UID}
+                GID: ${GID}
+        image: api:dev
+        container_name: api
+        restart: always
+        env_file: ./api/.env.dev
+        volumes: 
+            - "./api:/home/default/api"
+        ports: 
+            - "5000:5000"
+        depends_on: 
+            - db
+        networks: 
+            - backend
+
+networks: 
+    backend:
+    frontend:
+
+volumes: 
+    spending-journal:
+        external: true
