@@ -1,6 +1,6 @@
 version: '3.7'
 
-services: 
+services:
     nginx:
         build:
             context: ./web
@@ -33,6 +33,7 @@ services:
         container_name: api
         restart: always
         env_file: ./api/.env.dev
+        command: gunicorn --bind 0.0.0.0:5000 --chdir src main:app
         volumes: 
             - "./api:/home/default/api"
         ports: 

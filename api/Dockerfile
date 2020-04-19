@@ -11,5 +11,3 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 RUN groupadd -g ${GID} ${GROUP} && useradd -m -u ${UID} -g ${GROUP} ${USER}
 WORKDIR /home/${USER}/api
 USER ${USER}
-
-CMD flask run --host=0.0.0.0
