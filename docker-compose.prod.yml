@@ -3,8 +3,8 @@ version: '3.7'
 services: 
     nginx:
         build:
-            context: .
-            dockerfile: ./nginx/Dockerfile.prod
+            context: ./web
+            dockerfile: Dockerfile.prod
         image: nginx:prod
         container_name: nginx
         restart: always
