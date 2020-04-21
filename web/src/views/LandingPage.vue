@@ -31,7 +31,7 @@ export default {
     async onSignIn(user) {
       const { data } = await ApiService.make_custom_request({
         method: "post",
-        url: "http://192.168.1.103:5000/access-token",
+        url: "http://192.168.1.6:5000/access-token",
         data: {
           "id_token": user.getAuthResponse().id_token
         }

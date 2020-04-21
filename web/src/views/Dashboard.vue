@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-          <v-col cols="5">
+          <v-col sm="12" md="6">
               <v-data-table
                 hide-default-header
                 :headers="headers"
@@ -11,12 +11,25 @@
                   {{ item.cost.toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
                 </template>
                 <template v-slot:top>
-                  <h2>Total: {{ total }}</h2>
+                  <v-toolbar flat color="white">
+                    <v-row>
+                      <v-col cols="8"><h2>Total: {{ total }}</h2></v-col>
+                      <v-col cols="4">
+                        <v-menu offset-y v-model="menu">
+                          <template v-slot:activator="{ on }">
+                            <v-text-field
+                              v-on="on"
+                              v-model="month_of_year"
+                              max-width="200px"
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker v-model="month_of_year" type="month"></v-date-picker>
+                        </v-menu>
+                      </v-col>
+                    </v-row>
+                  </v-toolbar>
                 </template>
               </v-data-table>
-          </v-col>
-          <v-col cols="3" text-align="center">
-            <v-date-picker v-model="month_of_year" type="month"></v-date-picker>
           </v-col>
     </v-row>
 </template>
@@ -37,7 +50,8 @@ export default {
     year: new Date().toISOString().substr(0, 4),
     month: new Date().toISOString().substr(5, 2),
     cost_by_item_types: [],
-    total: 0
+    total: 0,
+    menu: false
   }),
   methods: {
     async fetch_cost_by_item_types () {
