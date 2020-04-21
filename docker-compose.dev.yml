@@ -6,13 +6,13 @@ services:
     container_name: db
     restart: always
     volumes: 
-      - "/var/lib/docker/volumes/455163fdef4072553c8d8303d53292431c2696a2c61f3f2137e3eca65d5b233d/_data:/var/lib/mysql"
+      - "spending-journal:/var/lib/mysql"
     networks: 
       - backend
   api:
     build:
       context: ./api
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       args:
         UID: ${UID}
         GID: ${GID}
@@ -44,6 +44,10 @@ services:
       - frontend
     depends_on: 
       - api
+
+volumes: 
+  spending-journal:
+      external: true
 
 networks:
   frontend:
