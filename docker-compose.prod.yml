@@ -25,7 +25,7 @@ services:
     api:
         build:
             context: ./api
-            dockerfile: Dockerfile.dev
+            dockerfile: Dockerfile
             args:
                 UID: ${UID}
                 GID: ${GID}
