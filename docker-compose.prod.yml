@@ -18,9 +18,9 @@ services:
         image: mysql/mysql-server:5.7
         container_name: db
         restart: always
-        volumes: 
-            - "spending-journal:/var/lib/mysql"
-        networks: 
+        volumes:
+            - "db:/var/lib/mysql"
+        networks:
             - backend
     api:
         build:
@@ -43,10 +43,9 @@ services:
         networks: 
             - backend
 
-networks: 
+networks:
     backend:
     frontend:
 
-volumes: 
-    spending-journal:
-        external: true
+volumes:
+    db:
