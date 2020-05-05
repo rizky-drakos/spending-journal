@@ -18,6 +18,11 @@ services:
         image: mysql/mysql-server:5.7
         container_name: db
         restart: always
+        environment:
+            - MYSQL_USER
+            - MYSQL_PASSWORD
+            - MYSQL_DATABASE
+        command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
         volumes:
             - "db:/var/lib/mysql"
         networks:
@@ -29,7 +34,7 @@ services:
             args:
                 UID: ${UID}
                 GID: ${GID}
-        image: api:dev
+        image: api:prod
         container_name: api
         restart: always
         env_file: ./api/.env.dev
