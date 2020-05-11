@@ -39,7 +39,3 @@ db.init_app(app)
 ma.init_app(app)
 jwt.init_app(app)
 migrate.init_app(app, db)
-
-with app.test_request_context():
-    db.init_app(app)
-    db.create_all()
