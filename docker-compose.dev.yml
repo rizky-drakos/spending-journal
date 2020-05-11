@@ -5,6 +5,7 @@ services:
     image: mysql/mysql-server:5.7
     container_name: db
     restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes: 
       - "spending-journal:/var/lib/mysql"
     networks: 
