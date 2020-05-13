@@ -1,7 +1,18 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col>
+    <v-row align="center" justify="center">
+      <v-col md=3 cols=12>
+        <v-text-field
+          v-model="email"
+          label="Email"
+          clearable
+        ></v-text-field>
+        <v-text-field
+          v-model="password"
+          label="Password"
+          clearable
+          type="password"
+        ></v-text-field>
         <div id="google-signin-btn" class="g-signin2" data-onsuccess="onSignIn"></div>
       </v-col>
     </v-row>
@@ -14,6 +25,10 @@ import ApiService from "../services/api.service"
 
 
 export default {
+  data: () => ({
+    email: "",
+    password: "",
+  }),
   mounted() {
     const gapi_plugin = document.createElement("script")
     gapi_plugin.setAttribute("src", "https://apis.google.com/js/platform.js")
