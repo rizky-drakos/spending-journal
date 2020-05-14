@@ -33,6 +33,7 @@ api.add_resource(User, "/user", endpoint="user")
 api.add_resource(CostByItemTypes, "/cost-by-item-types", endpoint="cost-by-item-types")
 
 api.add_resource(AccessToken, "/access-token", endpoint="access-token")
+api.add_resource(AccessToken, "/guest-token", endpoint="guest-token")
 
 api.init_app(app)
 db.init_app(app)
