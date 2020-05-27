@@ -13,19 +13,15 @@
           MYSQL_DATABASE: mydb
           MYSQL_USER: root
           MYSQL_PASSWORD: rootroot
-    # - name: Wait for database container to be ready
-    #   wait_for:
-    #     state: drained
-    #     port: 3306
-    #     timeout: 6
-    #     connect_timeout: 1
-    #     delay: 3
-    # - name: Copy backup.db to the VM
-    #   copy:
-    #     src: backup.db
-    #     dest: /home/vagrant
-    #     owner: vagrant
-    #     group: vagrant
-    #     mode: 0644
-    # - name: Import backup.db to the db container
-    #   shell: docker exec db mysql -uroot -prootroot mydb < backup.db
+    - name: Wait for 10s before the db container is completely ready
+      wait_for:
+        timeout: 10
+    - name: Copy backup.db to the VM
+      copy:
+        src: backup.db
+        dest: /home/vagrant
+        owner: vagrant
+        group: vagrant
+        mode: 0644
+    - name: Import backup.db to the db container
+      shell: docker exec -i db mysql -uroot -prootroot mydb < backup.db
