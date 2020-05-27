@@ -3,13 +3,29 @@
   hosts: default
   become: True
   tasks:
-  - name: Create the database container
-    docker_container:
-      name: db
-      image: mysql/mysql-server:5.7
-      state: started
-      env:
-        MYSQL_ROOT_PASSWORD: rootroot
-        MYSQL_DATABASE: mydb
-        MYSQL_USER: root
-        MYSQL_PASSWORD: rootroot
+    - name: Create the database container
+      docker_container:
+        name: db
+        image: mysql/mysql-server:5.7
+        state: started
+        env:
+          MYSQL_ROOT_PASSWORD: rootroot
+          MYSQL_DATABASE: mydb
+          MYSQL_USER: root
+          MYSQL_PASSWORD: rootroot
+    # - name: Wait for database container to be ready
+    #   wait_for:
+    #     state: drained
+    #     port: 3306
+    #     timeout: 6
+    #     connect_timeout: 1
+    #     delay: 3
+    # - name: Copy backup.db to the VM
+    #   copy:
+    #     src: backup.db
+    #     dest: /home/vagrant
+    #     owner: vagrant
+    #     group: vagrant
+    #     mode: 0644
+    # - name: Import backup.db to the db container
+    #   shell: docker exec db mysql -uroot -prootroot mydb < backup.db
