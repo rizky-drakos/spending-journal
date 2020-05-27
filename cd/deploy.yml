@@ -1,0 +1,15 @@
+---
+- name: Containers Deployment
+  hosts: default
+  become: True
+  tasks:
+  - name: Create the database container
+    docker_container:
+      name: db
+      image: mysql/mysql-server:5.7
+      state: started
+      env:
+        MYSQL_ROOT_PASSWORD: rootroot
+        MYSQL_DATABASE: mydb
+        MYSQL_USER: root
+        MYSQL_PASSWORD: rootroot
