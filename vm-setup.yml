@@ -1,11 +1,11 @@
 ###########################################################
 #
 # This playbook works side by side with the Vagrantfile ,
-# under this folder, to provision VMs created using that
-# Vagrantfile.
+# which also locates under this folder, to provision VMs 
+# created using that Vagrantfile.
 #
 # In that, it installs required packages (including docker,
-# docker-py and docker SDK for Python) for the
+# docker-py and docker SDK for Python) for the Ansible
 # docker_container module.
 #
 ###########################################################
