@@ -3,25 +3,47 @@
   hosts: default
   become: True
   tasks:
-    - name: Create the database container
-      docker_container:
-        name: db
-        image: mysql/mysql-server:5.7
-        state: started
-        env:
-          MYSQL_ROOT_PASSWORD: rootroot
-          MYSQL_DATABASE: mydb
-          MYSQL_USER: root
-          MYSQL_PASSWORD: rootroot
-    - name: Wait for 10s before the db container is completely ready
-      wait_for:
-        timeout: 10
-    - name: Copy backup.db to the VM
-      copy:
-        src: backup.db
-        dest: /home/vagrant
-        owner: vagrant
-        group: vagrant
-        mode: 0644
-    - name: Import backup.db to the db container
-      shell: docker exec -i db mysql -uroot -prootroot mydb < backup.db
+  - name: Create backend Network
+    docker_network:
+      name: backend
+
+  - name: Create the database container
+    docker_container:
+      name: db
+      image: mysql/mysql-server:5.7
+      state: started
+      env:
+        MYSQL_ROOT_PASSWORD: rootroot
+        MYSQL_DATABASE: mydb
+        MYSQL_USER: root
+        MYSQL_PASSWORD: rootroot
+      networks:
+        - name: backend
+      purge_networks: yes
+  - name: Wait for 10s before the db container is completely ready
+    wait_for:
+      timeout: 10
+  - name: Copy backup.db to the VM
+    copy:
+      src: backup.db
+      dest: /home/vagrant
+      owner: vagrant
+      group: vagrant
+      mode: 0644
+  - name: Import backup.db to the db container
+    shell: docker exec -i db mysql -uroot -prootroot mydb < backup.db
+    
+  - name: Create api Container
+    docker_container:
+      name: api
+      image: spendingjournal/back-end:prod
+      restart_policy: always
+      env:
+        FLASK_APP: src/main.py
+        FLASK_ENV: development
+        PYTHONDONTWRITEBYTECODE: "1"
+      ports: 
+        - "5000:5000"
+      networks: 
+        - name: backend
+      purge_networks: yes
