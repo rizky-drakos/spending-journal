@@ -25,10 +25,7 @@ services:
         container_name: api
         restart: always
         env_file: ./api/.env.dev
-        command: gunicorn --bind 0.0.0.0:5000 --chdir src main:app
-        volumes: 
-            - "./api:/home/default/api"
-        ports: 
+        ports:
             - "5000:5000"
         depends_on: 
             - db
