@@ -5,8 +5,8 @@
 # created using that Vagrantfile.
 #
 # In that, it installs required packages (including docker,
-# docker-py and docker SDK for Python) for the Ansible
-# docker_container module.
+# docker SDK for Python) for the Ansible docker_container 
+# module.
 #
 ###########################################################
 ---
@@ -35,7 +35,7 @@
       name: "{{ item }}"
     loop: [ 'docker-ce', 'docker-ce-cli', 'containerd.io' ]
 
-  # docker-py and docker installation is done via pip
+    # Docker SDK for Python installation is done via the pip module
   - name: Install required packages for pip module
     apt:
       update_cache: yes
