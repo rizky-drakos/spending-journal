@@ -15,7 +15,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "spending-journal-server" {
-    ami = "ami-08569b978cc4dfa10"
+    ami = "ami-0615132a0f36d24f4"
     instance_type = "t2.micro"
     key_name = "SpendingJournalAWS"
     vpc_security_group_ids = ["sg-5d14ae2e"]
