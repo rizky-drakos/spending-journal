@@ -23,8 +23,23 @@ resource "aws_instance" "spending-journal-server" {
         Name = "spending-journal"
     }
 
+    # local-exec provisioner will not wait till the ssh connection is established,
+    # but remote-exec does.
+    provisioner "remote-exec" {
+      connection {
+        type = "ssh"
+        host = self.public_ip
+        user = "ec2-user"
+        private_key = file("SpendingJournalAWS.pem")
+      }
+    }
+
     provisioner "local-exec" {
         command = "echo '${self.public_ip}' > inventory"
+    }
+
+    provisioner "local-exec" {
+        command = "ansible-playbook --private-key SpendingJournalAWS.pem -u ec2-user -i inventory ec2-setup.yml"
     }
 }
 
