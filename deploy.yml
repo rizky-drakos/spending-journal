@@ -1,6 +1,6 @@
 ---
 - name: Containers Deployment
-  hosts: default
+  hosts: all
   become: True
   tasks:
   - name: Create back-end Network
@@ -30,9 +30,9 @@
   - name: Copy backup.db to the VM
     copy:
       src: backup.db
-      dest: /home/vagrant
-      owner: vagrant
-      group: vagrant
+      dest: "/home/{{ user }}"
+      owner: "{{ user }}"
+      group: "{{ user }}"
       mode: 0644
   - name: Import backup.db to the db container
     shell: docker exec -i db mysql -uroot -prootroot mydb < backup.db
