@@ -4,10 +4,10 @@
 
 <h4>For Development</h4>
 
-<p>We make use of Docker containers to free us from directly installing development dependencies on our machines, as well as to provide a common development environement among all the contributors.</p>
+<p>We make use of Docker containers to free us from <b>directly installing development dependencies</b> on our machines, as well as to <b>provide a common development environement</b> for all the contributors.</p>
 
 <p>The idea is to mount the source code of each module into a corresponding container.</p>
 
 <p align="center">
-  <img src="./images/mount-source-code.png">
+  <img src="./images/mount-source-code.png"  alt="source code is bind-mounted">
 </p>
