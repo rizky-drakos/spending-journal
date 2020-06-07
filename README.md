@@ -1,7 +1,7 @@
 <h2 align="center">Spending Journal</h2>
 
 <h3>How much did I spend yesterday/ last week / last month, and what are they?</h3>
-<p>Everything in Spending Journal was designed to help us (at least me) answer such questions</p> 
+<p>Everything in Spending Journal was designed to help us (or just me :laughing:) answer these questions.</p> 
 <h3>Installation</h3>
 
 <h4>For Development</h4>
