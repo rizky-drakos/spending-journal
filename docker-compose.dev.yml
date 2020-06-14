@@ -5,11 +5,21 @@ services:
     image: mysql/mysql-server:5.7
     container_name: db
     restart: always
+    # These options are added to support full Unicode.
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes: 
-      - "spending-journal:/var/lib/mysql"
-    networks: 
+    # For details:
+    # https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/docker-mysql-more-topics.html#docker-environment-variables
+    environment:
+      MYSQL_ROOT_PASSWORD: rootroot
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootroot
+    # A volume will be automatically created, and mapped to /var/lib/mysql insdie the container.
+    volumes:
+      - /var/lib/mysql
+    networks:
       - backend
+
   api:
     build:
       context: ./api
@@ -17,13 +27,13 @@ services:
       args:
         UID: ${UID}
         GID: ${GID}
-    image: api:dev
+    image: api:development
     container_name: api
     restart: always
     env_file: ./api/.env.dev
     volumes: 
       - "./api:/home/default/api"
-    ports: 
+    ports:
       - "5000:5000"
     command: flask run --host=0.0.0.0
     depends_on: 
@@ -34,7 +44,7 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile.dev
-    image: web:dev
+    image: web:development
     container_name: web
     restart: always
     volumes:
@@ -45,10 +55,6 @@ services:
       - frontend
     depends_on: 
       - api
-
-volumes: 
-  spending-journal:
-      external: true
 
 networks:
   frontend:
