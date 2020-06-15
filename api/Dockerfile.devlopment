@@ -1,0 +1,28 @@
+# #################################################
+#
+# This Dockerfile helps to create images for the
+# API development environment.
+#
+# This Dockerfile should be built and used 
+# locally, because it depends on the user uid and
+# gid of the individual developer which might vary. 
+#
+###################################################
+FROM python:3.8.1-slim-buster 
+
+# 1000 is the common uid and gid in Linux.
+# These values should be replaced with your uid and gid at the build time.
+ARG UID=1000
+ARG GID=1000
+ARG USER=spendingjournal
+ARG GROUP=spendingjournal
+
+COPY development-requirements.txt /
+RUN pip install --upgrade pip && pip install --no-cache-dir -r development-requirements.txt
+
+# Proccesses in containers should be started with a non-root user.
+# -o option is added in case gid/uid is already occupied.
+RUN groupadd -o -g ${GID} ${GROUP} && useradd -o -m -u ${UID} -g ${GROUP} ${USER}
+USER ${USER}
+
+WORKDIR /home/${USER}/api

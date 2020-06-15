@@ -21,25 +21,21 @@ services:
       - backend
 
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-      args:
-        UID: ${UID}
-        GID: ${GID}
-    image: api:development
+    image: spendingjournal/back-end:development
     container_name: api
     restart: always
-    env_file: ./api/.env.dev
-    volumes: 
-      - "./api:/home/default/api"
+    env_file: ./api/.env.development
+    # Mount the API's source code into the container.
+    volumes:
+      - "./api:/home/spendingjournal/api"
     ports:
       - "5000:5000"
     command: flask run --host=0.0.0.0
-    depends_on: 
+    depends_on:
       - db
-    networks: 
+    networks:
       - backend
+
   web:
     build:
       context: ./web
