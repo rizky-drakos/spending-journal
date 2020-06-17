@@ -1,0 +1,22 @@
+FROM node:12.16.1-buster-slim
+
+# The dafault 1000 is the common uid and gid.
+# If your uid/gio is not equal to 1000, these values should
+# be replaced with your uid and gid at the build time.
+ARG UID=1000
+ARG GID=1000
+ARG USER=spendingjournal
+ARG GROUP=spendingjournal
+
+# Run other build steps and processes as an unprivileged user.
+# -o option is added in case gid/uid is already occupied.
+RUN groupadd -o -g ${GID} ${GROUP} && useradd -o -m -u ${UID} -g ${GROUP} ${USER}
+USER ${USER}
+
+# Install dependencies.
+WORKDIR /home/${USER}
+COPY --chown=1000 package.json package-lock.json ./
+RUN npm install --quiet
+RUN npm install @vue/cli --quiet
+
+CMD [ "npm", "run", "serve" ]

@@ -1,8 +1,0 @@
-FROM node:12.16.1-buster-slim
-
-COPY package.json .
-RUN npm install
-RUN npm install -g @vue/cli
-WORKDIR /home/node/web
-USER node
-CMD npm run serve
