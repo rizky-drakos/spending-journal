@@ -21,7 +21,7 @@ services:
       - backend
 
   api:
-    image: spendingjournal/back-end:development
+    image: spendingjournal/api:development
     container_name: api
     restart: always
     env_file: ./api/.env.development
