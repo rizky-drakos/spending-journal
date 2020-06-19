@@ -37,17 +37,16 @@ services:
       - backend
 
   web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile.dev
-    image: web:development
+    image: spendingjournal/web:development
     container_name: web
     restart: always
     volumes:
-      - "./web:/home/node/web"
+      - "./web:/home/spendingjournal"
+      # The node_modules trick: https://jdlm.info/articles/2019/09/06/lessons-building-node-app-docker.html
+      - "spendingjournal_node_modules:/home/spendingjournal/node_modules"
     ports:
-      - "8080:8080"
-    networks: 
+      - "80:8080"
+    networks:
       - frontend
     depends_on: 
       - api
@@ -55,3 +54,6 @@ services:
 networks:
   frontend:
   backend:
+
+volumes:
+  spendingjournal_node_modules:
