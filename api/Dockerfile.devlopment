@@ -10,8 +10,9 @@
 ###################################################
 FROM python:3.8.1-slim-buster 
 
-# 1000 is the common uid and gid in Linux.
-# These values should be replaced with your uid and gid at the build time.
+# The dafault 1000 is the common uid and gid in Linux.
+# These values should be replaced with your uid and gid at the build time
+# if your uid/gio is not equal to 1000.
 ARG UID=1000
 ARG GID=1000
 ARG USER=spendingjournal
