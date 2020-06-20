@@ -10,20 +10,19 @@
 ###################################################
 FROM python:3.8.1-slim-buster 
 
-# The dafault 1000 is the common uid and gid in Linux.
-# These values should be replaced with your uid and gid at the build time
-# if your uid/gio is not equal to 1000.
-ARG UID=1000
-ARG GID=1000
-ARG USER=spendingjournal
-ARG GROUP=spendingjournal
+# These values should be replaced with your uid and gid at the build time.
+ARG uid
+ARG gid
+
+ARG user=spendingjournal
+ARG group=spendingjournal
 
 COPY development-requirements.txt /
 RUN pip install --upgrade pip && pip install --no-cache-dir -r development-requirements.txt
 
 # Proccesses in containers should be started with a non-root user.
 # -o option is added in case gid/uid is already occupied.
-RUN groupadd -o -g ${GID} ${GROUP} && useradd -o -m -u ${UID} -g ${GROUP} ${USER}
-USER ${USER}
+RUN groupadd -o -g ${gid} ${group} && useradd -o -m -u ${uid} -g ${group} ${user}
+USER ${user}
 
-WORKDIR /home/${USER}/api
+WORKDIR /home/${user}/api

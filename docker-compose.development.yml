@@ -25,8 +25,8 @@ services:
       context: ./api
       dockerfile: Dockerfile.development
       args:
-        - UID
-        - GID
+        - uid
+        - gid
     image: spendingjournal/api:development
     container_name: api
     restart: always
@@ -47,8 +47,8 @@ services:
       context: ./web
       dockerfile: Dockerfile.development
       args:
-        - UID
-        - GID
+        - uid
+        - gid
     image: spendingjournal/web:development
     container_name: web
     restart: always
