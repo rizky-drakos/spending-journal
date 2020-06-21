@@ -26,4 +26,4 @@ from main import db
 db.create_all()
 ``` 
 3. Becuase we're integrating **Google Sign-In** into our web application, and it requires a valid domain name to work. So you need to map your loopback IP address - like 127.0.0.1 - to spendingjournal.com in the /etc/hosts file.
-4. Now you can try making some changes to either Web/API's source code and observe them once the service is automatically reloaded successfully insde the container.
+4. Now you can try making some changes to either Web/API's source code and observe them once the service is **automatically reloaded** successfully inside the container.
