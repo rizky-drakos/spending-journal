@@ -1,14 +1,14 @@
 # #################################################
 #
 # This Dockerfile helps to create images for the
-# API development environment.
+# API module development environment.
 #
-# This Dockerfile should be built and used 
+# This Dockerfile should be built and used
 # locally, because it depends on the user uid and
-# gid of the individual developer which might vary. 
+# gid of the individual developer which might vary.
 #
 ###################################################
-FROM python:3.8.1-slim-buster 
+FROM python:3.8.1-slim-buster
 
 # These values should be replaced with your uid and gid at the build time.
 ARG uid
@@ -17,12 +17,19 @@ ARG gid
 ARG user=spendingjournal
 ARG group=spendingjournal
 
-COPY development-requirements.txt /
-RUN pip install --upgrade pip && pip install --no-cache-dir -r development-requirements.txt
-
 # Proccesses in containers should be started with a non-root user.
 # -o option is added in case gid/uid is already occupied.
 RUN groupadd -o -g ${gid} ${group} && useradd -o -m -u ${uid} -g ${group} ${user}
 USER ${user}
 
+# WORKDIR creates directories as root instead of USER: https://github.com/moby/moby/issues/36677
+#
+# We'd better not rely on WORKDIR and create the workspace ourselves.
+RUN mkdir /home/${user}/api
 WORKDIR /home/${user}/api
+
+# Install dependencies.
+COPY development-requirements.txt ./
+RUN pip install --upgrade pip --user && pip install --no-cache-dir -r development-requirements.txt --user
+
+ENV PATH="/home/${user}/.local/bin:${PATH}"

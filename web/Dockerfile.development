@@ -1,6 +1,16 @@
+# #################################################
+#
+# This Dockerfile helps to create images for the
+# Web module development environment.
+#
+# This Dockerfile should be built and used
+# locally, because it depends on the user uid and
+# gid of the individual developer which might vary.
+#
+###################################################
 FROM node:12.16.1-buster-slim
 
-# these values should be replaced with your uid and gid at the build time.
+# These values should be replaced with your uid and gid at the build time.
 ARG uid
 ARG gid
 
@@ -12,11 +22,14 @@ ARG group=spendingjournal
 RUN groupadd -o -g ${gid} ${group} && useradd -o -m -u ${uid} -g ${group} ${user}
 USER ${user}
 
+# WORKDIR creates directories as root instead of USER: https://github.com/moby/moby/issues/36677
+#
+# We'd better not rely on WORKDIR and create the workspace ourselves.
+RUN mkdir /home/${user}/web
+WORKDIR /home/${user}/web
+
 # Install dependencies.
-# WORKDIR doesn't respect USER when creating directories: https://github.com/moby/moby/issues/20295,
-# so it's safer and more convenient to put your code in the user's home directory.
-WORKDIR /home/${user}
-COPY --chown=1000 package.json package-lock.json ./
+COPY --chown=${uid} package.json package-lock.json ./
 RUN npm install --quiet
 RUN npm install @vue/cli --quiet
 
