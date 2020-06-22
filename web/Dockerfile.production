@@ -1,0 +1,36 @@
+FROM node:12.16.1-buster-slim as builder
+
+# Basically, in production we don't modify the source code, so these variables
+# can have a default value.
+ARG uid=1000
+ARG gid=1000
+
+ARG user=spendingjournal
+ARG group=spendingjournal
+
+# Run other build steps and processes as an unprivileged user.
+# -o option is added in case gid/uid is already occupied.
+RUN groupadd -o -g ${gid} ${group} && useradd -o -m -u ${uid} -g ${group} ${user}
+USER ${user}
+
+# WORKDIR creates directories as root instead of USER: https://github.com/moby/moby/issues/36677
+#
+# We'd better not rely on WORKDIR and create the workspace ourselves.
+RUN mkdir /home/${user}/web
+WORKDIR /home/${user}/web
+
+# Install dependencies.
+COPY --chown=${uid} package.json package-lock.json ./
+RUN npm install --quiet
+RUN npm install @vue/cli --quiet
+
+# We only need the read permission to build the source code,
+# so it is not necessary to specify the --chown option here.
+COPY . .
+RUN npm run build
+
+FROM nginx:mainline
+COPY --from=builder /home/spendingjournal/web/dist /usr/share/nginx/html
+
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d
