@@ -1,0 +1,38 @@
+# ###############################################
+#
+# This Dockerfile helps to build an image with 
+# necessary dependencies for the api to be 
+# funtional.
+#
+#################################################
+FROM python:3.8.1-slim-buster
+
+# These values can be replaced with your uid and gid at the build time.
+# Basically, in production we don't modify the source code, so these variables
+# can have a default value.
+ARG uid=1000
+ARG gid=1000
+
+ARG user=spendingjournal
+ARG group=spendingjournal
+
+# Proccesses in containers should be started with a non-root user.
+# -o option is added in case gid/uid is already occupied.
+RUN groupadd -o -g ${gid} ${group} && useradd -o -m -u ${uid} -g ${group} ${user}
+USER ${user}
+
+# WORKDIR creates directories as root instead of USER: https://github.com/moby/moby/issues/36677
+#
+# We'd better not rely on WORKDIR and create the workspace ourselves.
+RUN mkdir /home/${user}/api
+WORKDIR /home/${user}/api
+
+# Install dependencies.
+COPY requirements.txt ./
+RUN pip install --upgrade pip --user && pip install --no-cache-dir -r requirements.txt --user
+
+ENV PATH="/home/${user}/.local/bin:${PATH}"
+
+COPY . .
+
+CMD [ "gunicorn", "--bind", "0.0.0.0:5000", "--chdir", "src", "main:app" ]

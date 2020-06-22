@@ -37,16 +37,15 @@
   - name: Import backup.db to the db container
     shell: docker exec -i db mysql -uroot -prootroot mydb < backup.db
     
-  - name: Create back-end Container
+  - name: Create API Container
     docker_container:
-      name: back-end
-      image: spendingjournal/back-end:prod
+      name: api
+      image: spendingjournal/api:production
       restart_policy: always
       state: started
       recreate: yes
       env:
         FLASK_APP: src/main.py
-        FLASK_ENV: development
         PYTHONDONTWRITEBYTECODE: "1"
       ports:
         - "5000:5000"
