@@ -1,9 +1,34 @@
+<!-- *****************************************************************************
+     TEMPLATE
+     *****************************************************************************  -->
+
 <template>
-  <div>
-    <v-btn outlined color="indigo" @click="logInAsGuest">Try</v-btn>
+  <div class="landing-page">
+    <!-- <v-btn outlined color="indigo" @click="logInAsGuest">Try</v-btn> -->
     <div id="google-signin-btn" class="g-signin2" data-onsuccess="onSignIn"></div>
   </div>
 </template>
+
+<!--  *****************************************************************************
+      STYLE
+      *****************************************************************************  -->
+
+<style>
+/*  Vertically and horizontally center the elements inside 
+    Reference: https://stackoverflow.com/questions/19026884/flexbox-center-horizontally-and-vertically
+*/
+.landing-page {
+  display: flex;           /* establish flex container */
+  flex-direction: column;  /* make main axis vertical */
+  justify-content: center; /* center items vertically, in this case */
+  align-items: center;     /* center items horizontally, in this case */
+  height: 500px;
+}
+</style>
+
+<!--  ****************************************************************************
+      SCRIPT
+      ****************************************************************************  -->
 
 <script>
 import TokenService from "../services/token.service"
@@ -18,6 +43,10 @@ export default {
     gapi_plugin.defer = true
     gapi_plugin.onload = () => {
       window.gapi.signin2.render("google-signin-btn", {
+        width: 240,
+        height: 50,
+        longtitle: true,
+        theme: 'dark',
         onsuccess: this.onSignIn
       })
     }
