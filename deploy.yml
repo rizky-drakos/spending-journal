@@ -53,14 +53,14 @@
         - name: back-end
       purge_networks: yes
 
-  - name: Create front-end Container
+  - name: Create Web Container
     docker_container:
-      name: front-end
-      image: spendingjournal/front-end:prod
+      name: web
+      image: spendingjournal/web:production
       restart_policy: always
       state: started
       recreate: yes
       ports:
         - "80:80"
       networks:
-        - name: front-end
+        - name: web
