@@ -1,21 +1,21 @@
+<!-- *****************************************************************************
+     TEMPLATE
+     *****************************************************************************  -->
 <template>
   <v-app>
-    <v-navigation-drawer
-      expand-on-hover
-      permanent
-      app
-    >
-      <v-list-item class="px-2">
+    <v-navigation-drawer permanent app width="150">
+      <!-- <v-list-item class="px-2">
+
         <v-list-item-avatar>
-          <!-- User a colon to mark src as a dynamic attribute -->
+          User a colon to mark src as a dynamic attribute
           <v-img :src="user.picture_url"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-title v-text="user.name"></v-list-item-title>
       </v-list-item>
 
-      <v-divider></v-divider>
-      <v-list>
+      <v-divider></v-divider> -->
+      <v-list dense>
         <v-list-item to="dashboard">
           <v-list-item-action>
             <v-icon>mdi-chart-bar</v-icon>
@@ -59,7 +59,26 @@
     </v-content>
   </v-app>
 </template>
-
+<!-- *****************************************************************************
+     TEMPLATE
+     *****************************************************************************  -->
+<style>
+.v-list-item {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.v-application--is-ltr .v-list-item__action:first-child {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 5px;
+}
+.v-list--dense .v-list-item .v-list-item__content {
+  padding: 8px 0;
+}
+</style>
+<!-- *****************************************************************************
+     SCRIPT
+     *****************************************************************************  -->
 <script>
 import TokenService from '../services/token.service'
 import ApiService from '../services/api.service'
