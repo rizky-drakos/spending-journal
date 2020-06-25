@@ -1,6 +1,6 @@
 <h2 align="center">Spending Journal</h2>
 
-### How much did I spend yesterday/ last week / last month, and what were they?
+### How much did I spend yesterday/last week/last month etc. and what were they?
 
 Everything in Spending Journal was designed to help answer these questions.
 
@@ -27,3 +27,8 @@ db.create_all()
 ``` 
 3. Becuase we're integrating **Google Sign-In** into our web application, and it requires a valid domain name to work. So you need to map your loopback IP address - like 127.0.0.1 - to spendingjournal.com in the /etc/hosts file.
 4. Now you can try making some changes to either Web/API's source code and observe them once the service is **automatically reloaded** successfully inside the container.
+> NOTE: The **TRY** button will not work without adding seed data as described in the bonus step below. 
+5. Bonus: In case you want to have some seed data for better testing:
+```console
+docker exec -i db mysql -uroot -prootroot mydb < seed.db
+```

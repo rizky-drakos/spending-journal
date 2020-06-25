@@ -1,18 +1,16 @@
 <!-- *****************************************************************************
      TEMPLATE
      *****************************************************************************  -->
-
 <template>
   <div class="landing-page">
-    <!-- <v-btn outlined color="indigo" @click="logInAsGuest">Try</v-btn> -->
     <div id="google-signin-btn" class="g-signin2" data-onsuccess="onSignIn"></div>
+    <span>or</span>
+    <v-btn outlined color="indigo" @click="logInAsGuest">Try</v-btn>
   </div>
 </template>
-
 <!--  *****************************************************************************
       STYLE
       *****************************************************************************  -->
-
 <style>
 /*  Vertically and horizontally center the elements inside 
     Reference: https://stackoverflow.com/questions/19026884/flexbox-center-horizontally-and-vertically
@@ -25,11 +23,9 @@
   height: 500px;
 }
 </style>
-
 <!--  ****************************************************************************
       SCRIPT
       ****************************************************************************  -->
-
 <script>
 import TokenService from "../services/token.service"
 import ApiService from "../services/api.service"
