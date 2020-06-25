@@ -1,39 +1,44 @@
+<!-- *****************************************************************************
+     TEMPLATE
+     *****************************************************************************  -->
 <template>
-    <v-row justify="center">
-          <v-col sm="12" md="10">
-              <v-data-table
-                hide-default-header
-                :headers="headers"
-                :items="cost_by_item_types"
-                sort-by="name"
-              >
-                <template v-slot:item.cost="{ item }">
-                  {{ item.cost.toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
-                </template>
-                <template v-slot:top>
-                  <v-toolbar flat color="white">
-                    <v-row>
-                      <v-col cols="8"><h2>Total: {{ total }}</h2></v-col>
-                      <v-col cols="4">
-                        <v-menu offset-y v-model="menu">
-                          <template v-slot:activator="{ on }">
-                            <v-text-field
-                              v-on="on"
-                              v-model="month_of_year"
-                              max-width="200px"
-                            ></v-text-field>
-                          </template>
-                          <v-date-picker v-model="month_of_year" type="month"></v-date-picker>
-                        </v-menu>
-                      </v-col>
-                    </v-row>
-                  </v-toolbar>
-                </template>
-              </v-data-table>
-          </v-col>
-    </v-row>
+  <v-row justify="center">
+    <v-col sm="12" md="10">
+      <v-data-table
+        hide-default-header
+        :headers="headers"
+        :items="cost_by_item_types"
+        sort-by="name"
+      >
+        <template v-slot:item.cost="{ item }">
+          {{ item.cost.toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
+        </template>
+        <template v-slot:top>
+          <v-toolbar flat color="white">
+            <v-row>
+              <v-col cols="8"><h2>Total: {{ total }}</h2></v-col>
+              <v-col cols="4">
+                <v-menu offset-y v-model="menu">
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-on="on"
+                      v-model="month_of_year"
+                      max-width="200px"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="month_of_year" type="month"></v-date-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+          </v-toolbar>
+        </template>
+      </v-data-table>
+    </v-col>
+  </v-row>
 </template>
-
+<!-- *****************************************************************************
+     SCRIPT
+     *****************************************************************************  -->
 <script>
 import ApiService from '../services/api.service'
 
@@ -60,7 +65,9 @@ export default {
         { year: this.year, month: this.month }
       )
       this.cost_by_item_types = cost_by_item_types
-      this.total = cost_by_item_types.map(item => item["cost"]).reduce((current, next) => current + next).toLocaleString('vi', {style : 'currency', currency : 'VND'})
+      if (cost_by_item_types.length != 0) {
+        this.total = cost_by_item_types.map(item => item["cost"]).reduce((current, next) => current + next).toLocaleString('vi', {style : 'currency', currency : 'VND'})
+      }
     }
   },
   watch: {
@@ -71,5 +78,4 @@ export default {
     }
   }
 }
-
 </script>
