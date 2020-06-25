@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col md="10">
+    <v-col>
       <v-data-table
         hide-default-header
         :headers="headers"

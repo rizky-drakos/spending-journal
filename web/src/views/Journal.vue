@@ -1,12 +1,13 @@
 <template>
   <v-row justify="center">
-    <v-col md="10">
+    <v-col>
       <v-data-table
         hide-default-header
         :headers="headers"
         :items="items"
         sort-by="record_date"
         :sort-desc="true"
+        :mobile-breakpoint=0
       >
         <template v-slot:item.amount="{ item }">
           {{ Number(item.amount).toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
@@ -97,7 +98,7 @@ export default {
     headers: [
       { text: "Item", value: "name", align: "left", sortable: false },
       { text: "Type", value: "item_type.name", align: "left", sortable: false},
-      { text: "Amount (Thousand VND)", value: "amount", align: "left", sortable: false},
+      { text: "Amount (Thousand VND)", value: "amount", align: "right", sortable: false},
       { text: "Date", value: "record_date", align: "left", sortable: false},
       { text: 'Actions', value: 'action', align: "right", sortable: false }
     ],

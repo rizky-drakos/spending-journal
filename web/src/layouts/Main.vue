@@ -48,7 +48,7 @@
             <v-icon>mdi-logout-variant</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>SIGN OUT</v-list-item-title>
+            <v-list-item-title>LOG OUT</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
