@@ -6,6 +6,7 @@
         :headers="headers"
         :items="item_types"
         sort-by="name"
+        :mobile-breakpoint=0
       >
         <template v-slot:top>
           <v-toolbar flat color="white">
