@@ -3,7 +3,17 @@
      *****************************************************************************  -->
 <template>
   <v-app>
-    <v-navigation-drawer permanent app width="150">
+    <v-app-bar app color="deep-purple" dark clipped-left prominent shrink-on-scroll scroll-threshold="10" src="https://i.picsum.photos/id/882/1920/1080.jpg?hmac=FCDToSVP5kHJLp0mnIaRatU0lH3ivaZ2GaSCuOzz2uU">
+      <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>Spending Journal</v-toolbar-title>
+      <template v-slot:img="{ props }">
+        <v-img
+          v-bind="props"
+          gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+        ></v-img>
+      </template>
+    </v-app-bar>
+    <v-navigation-drawer clipped app width="130" v-model="drawer">
       <!-- <v-list-item class="px-2">
 
         <v-list-item-avatar>
@@ -87,8 +97,9 @@ export default {
   data: () => ({
     user: {
       name: "",
-      picture_url: ""
-    }
+      picture_url: "",
+    },
+    drawer: true
   }),
   async mounted() {
     const gapi_plugin = document.createElement("script")
