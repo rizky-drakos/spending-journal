@@ -14,22 +14,19 @@
           {{ item.cost.toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
         </template>
         <template v-slot:top>
-          <v-toolbar flat color="white">
-            <v-row>
-              <v-col cols="8"><h2>Total: {{ total }}</h2></v-col>
-              <v-col cols="4">
-                <v-menu offset-y v-model="menu">
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-on="on"
-                      v-model="month_of_year"
-                      max-width="200px"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker v-model="month_of_year" type="month"></v-date-picker>
-                </v-menu>
-              </v-col>
-            </v-row>
+          <v-toolbar flat>
+              <h2>Total: {{ total }}</h2>
+              <v-spacer></v-spacer>
+              <v-menu offset-y v-model="menu">
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-on="on"
+                    tile outlined
+                    large
+                  >{{ month_of_year }} </v-btn>
+                </template>
+                <v-date-picker v-model="month_of_year" type="month"></v-date-picker>
+              </v-menu>
           </v-toolbar>
         </template>
       </v-data-table>
