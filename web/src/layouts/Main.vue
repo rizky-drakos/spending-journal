@@ -3,9 +3,25 @@
      *****************************************************************************  -->
 <template>
   <v-app>
-    <v-app-bar app color="deep-purple" dark clipped-left prominent shrink-on-scroll scroll-threshold="10" src="https://i.picsum.photos/id/882/1920/1080.jpg?hmac=FCDToSVP5kHJLp0mnIaRatU0lH3ivaZ2GaSCuOzz2uU">
+    <v-app-bar
+      app
+      color="deep-purple"
+      dark
+      clipped-left
+      prominent
+      shrink-on-scroll
+      scroll-threshold="10"
+      src="https://i.picsum.photos/id/882/1920/1080.jpg?hmac=FCDToSVP5kHJLp0mnIaRatU0lH3ivaZ2GaSCuOzz2uU"
+    >
       <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Spending Journal</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-avatar>
+          <v-img :src="user.picture_url"></v-img>
+        </v-avatar>
+      </v-btn>
+      <!-- debt -->
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
