@@ -10,7 +10,7 @@
       clipped-left
       prominent
       shrink-on-scroll
-      scroll-threshold="10"
+      scroll-threshold="15"
       src="https://i.picsum.photos/id/882/1920/1080.jpg?hmac=FCDToSVP5kHJLp0mnIaRatU0lH3ivaZ2GaSCuOzz2uU"
     >
       <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
