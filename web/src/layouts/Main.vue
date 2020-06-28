@@ -30,17 +30,6 @@
       </template>
     </v-app-bar>
     <v-navigation-drawer clipped app width="130" v-model="drawer">
-      <!-- <v-list-item class="px-2">
-
-        <v-list-item-avatar>
-          User a colon to mark src as a dynamic attribute
-          <v-img :src="user.picture_url"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-title v-text="user.name"></v-list-item-title>
-      </v-list-item>
-
-      <v-divider></v-divider> -->
       <v-list dense>
         <v-list-item to="dashboard">
           <v-list-item-action>

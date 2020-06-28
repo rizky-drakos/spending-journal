@@ -3,7 +3,9 @@
      *****************************************************************************  -->
 <template>
   <v-data-table
+    disable-pagination
     hide-default-header
+    hide-default-footer
     :headers="headers"
     :items="items"
     sort-by="record_date"
