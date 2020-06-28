@@ -1,95 +1,123 @@
+<!-- *****************************************************************************
+     TEMPLATE
+     *****************************************************************************  -->
 <template>
-  <v-row justify="center">
-    <v-col>
-      <v-data-table
-        hide-default-header
-        :headers="headers"
-        :items="items"
-        sort-by="record_date"
-        :sort-desc="true"
-        :mobile-breakpoint=0
-      >
-        <template v-slot:item.amount="{ item }">
-          {{ Number(item.amount).toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
-        </template>
-        <template v-slot:top>
-          <v-toolbar flat color="white">
-            <v-spacer></v-spacer>
-            <v-dialog v-model="dialog" width="800px">
-              <template v-slot:activator="{ on }">
-                <v-btn v-on="on" outlined>New Item</v-btn>
-              </template>
-              <v-card >
-                <v-card-title>
-                  <span>Form</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-form ref="form">
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" md="3">
-                        <v-text-field 
-                          autofocus v-model="editedItem.name" 
-                          label="Item" clearable 
-                          outlined append-icon="mdi-cart-outline" 
-                          dense :rules="[rules.required]"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" md="3">
-                        <v-select
-                          v-model="editedItem.item_type" dense clearable
-                          :items="item_types" outlined :rules="[rules.required]"
-                          item-text="name" return-object
-                          append-icon="mdi-shape-outline" label="Type"
-                        ></v-select>
-                      </v-col>
-                      <v-col cols="12" md="3">
-                        <v-menu offset-y v-model="menu">
-                          <template v-slot:activator="{ on }">
-                            <v-text-field 
-                              v-on="on" v-model="editedItem.record_date" 
-                              label="Date" readonly
-                              append-icon="mdi-calendar-today" outlined 
-                              dense :rules="[rules.required]"
-                            ></v-text-field>
-                          </template>
-                          <v-date-picker 
-                            v-model="editedItem.record_date" 
-                            no-title scrollable offset-y
-                            :rules="[rules.required]"
-                          ></v-date-picker>
-                        </v-menu>
-                      </v-col>
-                      <v-col cols="12" md="3">
-                        <v-text-field 
-                          type="number" v-model="editedItem.amount" 
-                          label="Amount" clearable 
-                          outlined append-icon="mdi-currency-usd" 
-                          dense :rules="[rules.required]"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                  </v-form>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn text @click="close">Cancel</v-btn>
-                  <v-btn text @click="save">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.action="{ item }">
-          <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil-outline</v-icon>
-          <v-icon small @click="deleteItem(item)">mdi-delete-outline</v-icon>
-        </template>
-      </v-data-table>
-    </v-col>
-  </v-row>
+  <v-data-table
+    hide-default-header
+    :headers="headers"
+    :items="items"
+    sort-by="record_date"
+    :sort-desc="true"
+    :mobile-breakpoint=0
+  >
+    <template v-slot:item.amount="{ item }">
+      {{ Number(item.amount).toLocaleString('vi', {style : 'currency', currency : 'VND'}) }}
+    </template>
+    <template v-slot:top>
+      <v-toolbar flat color="white">
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" width="800px" persistent>
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" outlined>New Item</v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span>Form</span>
+              <v-spacer></v-spacer>
+              <v-menu offset-y v-model="menu">
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-on="on"
+                    tile outlined
+                    large
+                  >{{ editedItem.record_date }} </v-btn>
+                </template>
+                <v-date-picker 
+                  v-model="editedItem.record_date" 
+                  no-title 
+                  scrollable 
+                  offset-y
+                  :rules="[rules.required]"
+                ></v-date-picker>
+              </v-menu>
+            </v-card-title>
+            <v-card-text class="v-card__text">
+              <v-form ref="form">
+              <v-container>
+                <v-row>
+                  <v-col cols="12" md="8">
+                    <v-text-field 
+                      autofocus 
+                      v-model="editedItem.name" 
+                      label="Item" 
+                      clearable 
+                      append-icon="mdi-cart-outline" 
+                      :rules="[rules.required]"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-select
+                      v-model="editedItem.item_type" 
+                      clearable
+                      :items="item_types" 
+                      :rules="[rules.required]"
+                      item-text="name" 
+                      return-object
+                      append-icon="mdi-shape-outline" 
+                      label="Type"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      outlined
+                      v-model="editedItem.amount" 
+                      label="Amount" 
+                      clearable
+                      append-icon="mdi-cash"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="9">
+                    <v-slider
+                    dense
+                    min="40"
+                    max="218"
+                    ></v-slider>
+                  </v-col>
+                </v-row>
+              </v-container>
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text @click="close">Cancel</v-btn>
+              <v-btn text @click="save">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+    </template>
+    <template v-slot:item.action="{ item }">
+      <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil-outline</v-icon>
+      <v-icon small @click="deleteItem(item)">mdi-delete-outline</v-icon>
+    </template>
+  </v-data-table>
 </template>
-
+<!-- *****************************************************************************
+     STYLE
+     *****************************************************************************  -->
+<style>
+.v-dialog > .v-card > .v-card__text {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+.v-slider--horizontal {
+  padding-top: 60px;
+}
+</style>
+<!-- *****************************************************************************
+     SCRIPT
+     *****************************************************************************  -->
 <script>
 import ApiService from '../services/api.service'
 
@@ -109,13 +137,13 @@ export default {
       name: "",
       item_type: "",
       amount: "",
-      record_date: ""
+      record_date: new Date().toISOString().substr(0,10)
     },
     defaultItem: {
       name: "",
       item_type: "",
       amount: "",
-      record_date: ""
+      record_date: new Date().toISOString().substr(0,10)
     },
     dialog: false,
     menu: false,
