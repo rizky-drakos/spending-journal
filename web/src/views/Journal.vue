@@ -69,6 +69,7 @@
                   </v-col>
                   <v-col cols="12" md="3">
                     <v-text-field
+                      class="text-right"
                       outlined
                       v-model="editedItem.amount" 
                       label="Amount" 
@@ -78,9 +79,12 @@
                   </v-col>
                   <v-col cols="12" md="9">
                     <v-slider
+                    v-model="editedItem.amount"
                     dense
-                    min="40"
-                    max="218"
+                    thumb-label="always"
+                    :thumb-size="48"
+                    min="0"
+                    max="100000"
                     ></v-slider>
                   </v-col>
                 </v-row>
@@ -136,13 +140,13 @@ export default {
     editedItem: {
       name: "",
       item_type: "",
-      amount: "",
+      amount: 12500,
       record_date: new Date().toISOString().substr(0,10)
     },
     defaultItem: {
       name: "",
       item_type: "",
-      amount: "",
+      amount: 12500,
       record_date: new Date().toISOString().substr(0,10)
     },
     dialog: false,
