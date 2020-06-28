@@ -28,9 +28,9 @@
                 <template v-slot:activator="{ on }">
                   <v-btn
                     v-on="on"
-                    tile outlined
+                    outlined
                     large
-                  >{{ editedItem.record_date }} </v-btn>
+                  >{{ editedItem.record_date }}<v-icon right>mdi-calendar-blank</v-icon></v-btn>
                 </template>
                 <v-date-picker 
                   v-model="editedItem.record_date" 
