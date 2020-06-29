@@ -39,8 +39,9 @@ class Items(Resource):
 
     @jwt_required
     def get(self):
+        page = request.args.get('page', 1, type=int)
         user_id = get_jwt_identity()
-        items = ItemModel.query.filter_by(user_id=user_id).all()
+        items = ItemModel.query.filter_by(user_id=user_id).order_by(ItemModel.record_date.desc()).paginate(page, 15, False).items
         return items_schema.dump(items)
 
     @jwt_required
