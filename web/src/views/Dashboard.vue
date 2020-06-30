@@ -6,6 +6,7 @@
     <v-col>
       <v-data-table
         hide-default-header
+        hide-default-footer
         :headers="headers"
         :items="cost_by_item_types"
         sort-by="name"

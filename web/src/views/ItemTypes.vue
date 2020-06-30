@@ -3,6 +3,7 @@
     <v-col>
       <v-data-table
         hide-default-header
+        hide-default-footer
         :headers="headers"
         :items="item_types"
         sort-by="name"

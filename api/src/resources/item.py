@@ -41,8 +41,11 @@ class Items(Resource):
     def get(self):
         page = request.args.get('page', 1, type=int)
         user_id = get_jwt_identity()
-        items = ItemModel.query.filter_by(user_id=user_id).order_by(ItemModel.record_date.desc()).paginate(page, 15, False).items
-        return items_schema.dump(items)
+        paginator = ItemModel.query.filter_by(user_id=user_id).order_by(ItemModel.record_date.desc()).paginate(page, 15, False)
+        previous_page = paginator.prev_num if paginator.has_prev else None
+        next_page = paginator.next_num if paginator.has_next else None
+        items = paginator.items
+        return { "items": items_schema.dump(items), "previous_page": previous_page, "next_page": next_page }
 
     @jwt_required
     def post(self):

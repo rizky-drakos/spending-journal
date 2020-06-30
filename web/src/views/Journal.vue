@@ -8,8 +8,6 @@
     hide-default-footer
     :headers="headers"
     :items="items"
-    sort-by="record_date"
-    :sort-desc="true"
     :mobile-breakpoint=0
   >
     <template v-slot:item.amount="{ item }">
@@ -17,6 +15,24 @@
     </template>
     <template v-slot:top>
       <v-toolbar flat color="white">
+        <span>Page:</span>
+        <v-btn 
+          outlined
+          class="previous-button"
+          :disabled="previous_page == null"
+          @click="loadItem(previous_page)"
+        >
+          <v-icon left>mdi-arrow-left-bold</v-icon>
+          Previous
+        </v-btn>
+        <v-btn 
+          outlined
+          :disabled="next_page == null"
+          @click="loadItem(next_page)"
+        >
+          Next
+          <v-icon right>mdi-arrow-right-bold</v-icon>
+        </v-btn>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" width="800px" persistent>
           <template v-slot:activator="{ on }">
@@ -48,11 +64,11 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" md="8">
-                    <v-text-field 
-                      autofocus 
-                      v-model="editedItem.name" 
-                      label="Item" 
-                      clearable 
+                    <v-text-field
+                      autofocus
+                      v-model="editedItem.name"
+                      label="Item"
+                      clearable
                       append-icon="mdi-cart-outline" 
                       :rules="[rules.required]"
                     ></v-text-field>
@@ -120,6 +136,10 @@
 .v-slider--horizontal {
   padding-top: 60px;
 }
+.previous-button {
+  margin-right: 10px;
+  margin-left: 10px;
+}
 </style>
 <!-- *****************************************************************************
      SCRIPT
@@ -138,6 +158,8 @@ export default {
     ],
     item_types: [],
     items: [],
+    previous_page: "",
+    next_page: "",
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -211,11 +233,19 @@ export default {
           this.items.splice(index_to_delete, 1)
         }
       }
+    },
+    async loadItem (page) {
+      const { data } = await ApiService.get('/items?page='+page)
+      this.items = data.items
+      this.previous_page = data.previous_page
+      this.next_page = data.next_page
     }
   },
   async mounted() {
-    const { data: items} = await ApiService.get('/items')
-    this.items = items
+    const { data } = await ApiService.get('/items')
+    this.items = data.items
+    this.previous_page = data.previous_page
+    this.next_page = data.next_page
     const { data: item_types } = await ApiService.get('/item-types')
     this.item_types = item_types
   },
@@ -223,7 +253,7 @@ export default {
     dialog (val) {
       // call close() when the dialog is closed.
       val || this.close()
-    },
+    }
   },
 }
 </script>
