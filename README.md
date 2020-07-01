@@ -30,5 +30,5 @@ db.create_all()
 > NOTE: The **TRY** button will not work without adding seed data as described in the bonus step below. 
 5. Bonus: In case you want to have some seed data for better testing:
 ```console
-docker exec -i db mysql -uroot -prootroot mydb < seed.db
+docker exec -i db mysql -uroot -prootroot mydb < seed.sql
 ```
