@@ -2,6 +2,7 @@
 =======
 .env
 .vscode
+api/venv/
 
 # module: web
 =======

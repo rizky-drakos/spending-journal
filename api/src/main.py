@@ -1,3 +1,4 @@
+import os
 import datetime
 
 from flask import Flask
@@ -13,8 +14,7 @@ from resources.access_token import AccessToken
 app = Flask(__name__)
 cors = CORS(app, resources="/*")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-    "mysql+pymysql://root:rootroot@db/mydb"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://" + os.environ["DATABASE_URL"]
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['JWT_SECRET_KEY'] = \

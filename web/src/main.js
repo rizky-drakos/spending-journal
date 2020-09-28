@@ -10,7 +10,7 @@ import Main from './layouts/Main.vue'
 
 Vue.config.productionTip = false
 
-ApiService.init("http://spending-journal.com:5000")
+ApiService.init("http://spending-journal.herokuapp.com/api")
 // In case the user refreshes the page, headers
 // needs to be re-initialized.
 if(TokenService.get_token()) {
